@@ -1,6 +1,4 @@
-HOLA
 
-#Hola Mundo
 
 #prueba 1
 # install.packages("pacman")
@@ -126,7 +124,7 @@ base_datos <- base_datos %>% dplyr::rename(nombrenuevo=nombre_antiguo,
                                            nombre_nuevo=nombre_antiguo)
 
 
-base_antropologia <- base_antropologia <- base_antropologia %>% dplyr::rename (n_encuestador = cual_)
+base_antropologia <- base_antropologia %>% dplyr::rename (n_encuestador = cual_)
 names(base_antropologia)
 
 
@@ -152,6 +150,9 @@ base_antropologia <- base_antropologia %>%
                                  n_encuestador=="alejandra_mondaca_" ~ "Alejandra Mondaca",
                                  TRUE ~n_encuestador))
 table(base_antropologia$n_encuestador)
+
+
+
 
                                  
                                  
@@ -238,11 +239,70 @@ table(base_antropologia$n_encuestador)
 
 
 # renombro las sociodemográficas: 
+names(base_antropologia)
+base_antropologia <- base_antropologia %>% dplyr::rename()
+unique(base_antropologia$sd_03)
 
-base_antropologia <- base_antropologia %>% dplyr::rename( )
+
+
+unique(base_antropologia$sd_01) # 
+unique(base_antropologia$sd_02) # NOEL 
+table(base_antropologia$sd_03) # NOEL
+
+
+unique(base_antropologia$sd_04) # JOAQUÍN 
+unique(base_antropologia$sd_05) # MATÍAS 
+unique(base_antropologia$sd_07) # JOAQUÍN
+unique(base_antropologia$sd_08) # JOAQUÍN
+unique(base_antropologia$sd_09)
+
+names(base_antropologia)
+
+# distancia a la universidad
+# indice de prioridad social
+# zona de la ciudad 
+
+# Estrés académico
+unique(base_antropologia$ea_01)
+unique(base_antropologia$ea_02)
+
+
+# ea_01_cuantas_horas_dedica_aproximadamente_al_estudio_y_a_la_realizacion_de_trabajos_universitarios_fuera_del_aula_por_cada_dia_una_semana_habil_esto_es_de_lunes_a_viernes_por_ejemplo_si_lunes_y_martes_suelo_estudiar_mas_o_menos_3_horas_miercoles_5_horas_y_finalmente_jueves_y_viernes_suelo_estudiar_2_horas_el_total_de_horas_es_15_dividido_por_15_por_5_me_da_3_deberia_marcar_la_alternativa_b_3_o_4_horas",
+class(base_antropologia$ea_01) # transformar en factor y ordenar: NOEL 
+
+# ea_02_cuantas_horas_dedica_aproximadamente_al_estudio_cada_dia_a_lo_largo_del_fin_de_semana_sabado_y_domingo",
+unique(base_antropologia$ea_02) # transformar en factor y ordenar: NOEL 
+
+# ea_03_como_describiria_su_carga_academica_actual"
+unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
+
+# ea_04_en_el_ultimo_semestre_finalizado_aproximadamente_que_promedio_de_notas_ha_obtenido_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
+unique(base_antropologia$ea_04) # recodificar a número, recodificar a rangos: MATIAS
+
+# ea_05_que_tan_satisfecho_esta_con_tu_rendimiento_academico_en_el_ultimo_semestre_finalizado_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
+unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
+
+# ea_06_en_una_escala_del_1_al_5_donde_1_es_minimo_estres_y_5_es_maximo_estres_como_calificaria_su_nivel_de_estres_en_la_universidad_en_el_ultimo_semestre_finalizado",
+unique(base_antropologia$ea_06) # recodificar en 2: Joaquín
+
+# ea_07_en_que_medidas_el_estres_afecta_su_rendimiento_academico",
+unique(base_antropologia$ea_07) # recodificar en 2: Joaquín
+
+# ea_08_puede_identificar_por_si_mismo_cuando_se_siente_estresado_debidos_a_factores_relacionados_con_el_ambito_universitario",
+unique(base_antropologia$ea_08)
+
+# ea_09_cuando_esta_en_periodos_de_evaluaciones_academicas_ha_tenido_alguno_de_estos_sintomas_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
+unique(base_antropologia$ea_09) # SEBASTIÁN
+class(base_antropologia$ea_09)
+
+# RESPUESTA MÚLTIPLE 
+
+# ea_10_que_estrategias_utiliza_con_mayor_frecuencia_para_manejar_el_estres_academico_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
+unique(base_antropologia$ea_10) # NOEL 
+
 
 
 
 # Exportar ----------------------------------------------------------------
 
-write.xlsx(x = base_antropologia,file = "base/base_antropologia_limpia")
+write.xlsx(x = base_antropologia,file = "base_antropologia_limpia")
