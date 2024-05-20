@@ -1,6 +1,5 @@
 
-
-#prueba 1
+# 1. Instalo y abro paquetes -------------------------------------------------
 # install.packages("pacman")
 pacman::p_load(tidyverse,# Universo de paquetes : tidyr, dplyr, ggplot2,readr,purrr,tibble, stringr, forcats
                openxlsx,#leer archivos xlsx
@@ -9,34 +8,27 @@ pacman::p_load(tidyverse,# Universo de paquetes : tidyr, dplyr, ggplot2,readr,pu
                writexl,#Guardar tablas formato excel
                DataExplorer) #Exploración rápida
 
-
-#Importar el archivo y asignarlo en el environment----
+# 2. Importo archivo y lo asigno a environment ----------------------------
 base_antropologia <- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx")
+libro_codigos<- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx") # dejo una base sin limpiar para observar nombres de preguntas
 
 #Explorar
 glimpse(base_antropologia) #Una primera mirada de lo que hay en mis datos, la primera fila es extraña, dice "respuesta" o repite el nombre de la variable.
-
-#quitar la primera fila a mis datos
-
-
 names(base_antropologia) #observo que hay puntos, mayúsculas y minúsculas, etcétera. Está sucia
 
 
-#limpieza inicial----
+# 3. Data Wrangling -------------------------------------------------------
+#3.1. limpieza inicial
 base_antropologia <- janitor::clean_names(base_antropologia) #con esto transformo todo a minúscula, quito tildes, saco signos, borro espacios
+names(base_antropologia) # queda mucho mejor
 
-names(base_antropologia)# Queda mucho mejor
-
-#observación de base
+#3.2. observación de base
 nrow(base_antropologia) #147 cantidad de casos
 ncol(base_antropologia) #50 cantidad de variables
 sapply(base_antropologia, FUN = class) # sapply: realiza un a función a varias variables 
 str(base_antropologia) #estructura del objeto base de datos
 
-
-
-# Renombrar variables -----------------------------------------------------
-
+#3.3.Renombrar variables 
 #extraigo el nombre de todas las variables
 names (base_antropologia)
 
@@ -97,13 +89,9 @@ nombres_de_variables <- c(
 # Extraer las primeras cuatro letras de cada nombre de variable
 primeras_5_letras <- substr(nombres_de_variables, 1, 5)
 
-
-
-
 #primer argumento - string = de donde saco los nombres: el vector creado
 #segundo argumento - start = desde que posición extraigo (p)
 #tercer argumento - end= hasta donde (1)
-
 
 #renombro considerando todas las columnas elegidas asignando nuevos nombres
 base_antropologia <- base_antropologia %>%
@@ -111,23 +99,20 @@ base_antropologia <- base_antropologia %>%
 
 names(base_antropologia)
 
-
 #renombro algunas variables en específico
-#veo categorías de todas las variables
-sapply(base_antropologia, FUN = unique) 
-
 names(base_antropologia)
 
 #posibilidad de renombrar uno por uno las variables de interés. # primero nuevo nombre y luego nombre antiguo
-
-base_datos <- base_datos %>% dplyr::rename(nombrenuevo=nombre_antiguo,
-                                           nombre_nuevo=nombre_antiguo)
-
+#estructura: base_datos <- base_datos %>% dplyr::rename(nombrenuevo=nombre_antiguo,nombre_nuevo=nombre_antiguo)
 
 base_antropologia <- base_antropologia %>% dplyr::rename (n_encuestador = cual_)
 names(base_antropologia)
 
 
+# Trabajo con variables sociodemográficas
+# Limpieza de variable: n_encuestador: realizada por SAMANTA.
+# Por ser una pregunta abierta hago una limpieza de categorías
+# Elimino caracteres latinos, las pongo todas en minúsculas, reemplazo espacios por guión bajo.
 
 base_antropologia <- base_antropologia %>%
   mutate(
@@ -136,32 +121,30 @@ base_antropologia <- base_antropologia %>%
     n_encuestador = gsub(" ", "_", n_encuestador),  # Reemplaza espacios por guiones bajos en la columna `n_encuestador`
   )
 
-unique(base_antropologia$n_encuestador)
-# Suponiendo que 'base_antropologia' es tu dataframe y 'n_encuestador' es la columna de interés
+unique(base_antropologia$n_encuestador) #observo mucha variedad de como se escriben los nombres. 
+
+# voy a recodificar los nombres, para ello hago lo siguiente
+# hago un listado de los nombres 
 valores_unicos_a<- sort(unique(base_antropologia$n_encuestador), decreasing = F)
 
-# Imprimir los valores ordenados
+#imprimo los valores ordenados, para verlos, copiarlos y recodificarlos. 
 print(valores_unicos_descendentes)
 
-
+#hago un proceso de recodificación: por ejemplo con Alejandra Mondaca, Alonso silva y Amanda Baez (SEGUIR!)
 base_antropologia <- base_antropologia %>%
   mutate(n_encuestador=case_when(n_encuestador== "alejandra_"~ "Alejandra Mondaca",
                                  n_encuestador=="alejandra_mondaca" ~ "Alejandra Mondaca",
                                  n_encuestador=="alejandra_mondaca_" ~ "Alejandra Mondaca",
+                                 n_encuestador=="alonso_silva" ~ "Alonso Silva",
+                                 n_encuestador=="alonso_silva_" ~ "Alonso Silva",
+                                 n_encuestador=="amanda_baez" ~ "Amanda Baez",
+                                 n_encuestador=="amanda_baez_" ~ "Amanda Baez",
                                  TRUE ~n_encuestador))
 table(base_antropologia$n_encuestador)
 
-
-
-
-                                 
-                                 
-                                 
+# ir sacando los nombres desde acá
+                      
                                  "alexi" ~ "alexi",
-                                 "alonso_silva" ~ "Alonso Silva", 
-                                 "alonso_silva_" ~ "Alonso Silva",
-                                 "amanda_baez" ~ "Amanda Baez",
-                                 "amanda_baez_" ~ "amanda_baez", 
                                  "antonia_" ~ "antonia_", 
                                  "antonia_leiva"
                                  "antonia_ramirez_"
