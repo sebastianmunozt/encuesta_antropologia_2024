@@ -271,6 +271,20 @@ base_antropologia <- base_antropologia %>% mutate(edad=case_when(edad=="23.0"~"2
                                             TRUE ~ edad))
 unique(base_antropologia$edad)
 
+#ahora construyo una nueva variable con rangos
+
+
+base_antropologia$edad <- as.numeric(base_antropologia$edad)
+class(base_antropologia$edad)
+
+base_antropologia <- base_antropologia %>% 
+  mutate (edad_r= case_when (edad %in% c(18:20) ~ "18 a 20", 
+                            edad %in% c(21:23) ~ "21 a 23", 
+                            edad %in% c(24:29) ~ "24 a 29", 
+                            edad >= 30 ~ "30 o más"))
+
+str(base_antropologia)
+
 
 unique(base_antropologia$sd_04) # JOAQUÍN 
 unique(base_antropologia$sd_05) # MATÍAS 
