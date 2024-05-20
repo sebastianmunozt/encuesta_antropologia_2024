@@ -230,7 +230,10 @@ table(base_antropologia$n_encuestador)
                                  "yakim_"
                           
 
-
+# Genero un directorio para mis salidas: tablas y gráficos
+if(!dir.exists("outputs")) dir.create("outputs")
+                                 
+                                 
 # trabajo con  las sociodemográficas (limpiar y recodificar si corresponde): 
 
 unique(base_antropologia$sd_01) # No requiere trabajo
@@ -348,27 +351,25 @@ freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>%
   tb()
 
 #Guardo para graficar
-class(ea_09_graf)
-ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) 
+ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Síntoma", "Frecuencia", "%", "% Acumulado"),
+        caption = "Síntomas de Estress", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
+
+
 
 # renombro nombre de mi tabla
 ea_09_graf <-  ea_09_graf %>% 
   rename(Problema = value, Porcentaje= pct)
 
 # realizo gráfico
-ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
-  geom_col() +
-  labs (title = "Problemas derivados del Strees", 
-        subtitle = "según datos de Encuestas Estudianstes Antropología 2024",
-        x = "%",
-        y = "Problema") +
-  geom_text(aes(label = paste0(round(Porcentaje, 1), "%")), #concatena porcentaje con un decimal y "%".
-            hjust = -0.1, size = 4, nudge_x = -.9, fontface= "bold") +
-  scale_fill_viridis_d(option = "C", guide = "none") + 
-  theme_ipsum()
-
-
-ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
+g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
   geom_col() +
   labs(title = "Síntomas de Estrés Académico",
        subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
@@ -379,6 +380,10 @@ ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fi
             hjust = -0.1, size = 4, nudge_x = -.9, fontface= "bold", color = "white") +
   scale_fill_viridis_d(option = "C", guide = "none") +
   theme_ipsum()
+
+
+
+ggsave("outputs/g_ea_09_graf.png", plot = g_ea_09_graf, width = 10, height = 7, dpi = 300)
 
 
 # RESPUESTA MÚLTIPLE 
