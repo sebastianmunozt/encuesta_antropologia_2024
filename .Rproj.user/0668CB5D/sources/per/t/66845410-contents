@@ -125,7 +125,7 @@ unique(base_antropologia$n_encuestador) #observo mucha variedad de como se escri
 
 # voy a recodificar los nombres, para ello hago lo siguiente
 # hago un listado de los nombres 
-valores_unicos_a<- sort(unique(base_antropologia$n_encuestador), decreasing = F)
+valores_unicos_descendentes<- sort(unique(base_antropologia$n_encuestador), decreasing = F)
 
 #imprimo los valores ordenados, para verlos, copiarlos y recodificarlos. 
 print(valores_unicos_descendentes)
@@ -221,40 +221,81 @@ table(base_antropologia$n_encuestador)
                           
 
 
-# renombro las sociodemográficas: 
+# trabajo con  las sociodemográficas (limpiar y recodificar si corresponde): 
+
+unique(base_antropologia$sd_01) # No requiere trabajo
+
+#sd_02: NOEL
+unique(base_antropologia$sd_02)  
+
+#sd_03: NOEL 
+#Rename sd_03
+#primero la cambio el nombre a la variable
+base_antropologia <- base_antropologia %>% dplyr::rename (edad =sd_03)
 names(base_antropologia)
-base_antropologia <- base_antropologia %>% dplyr::rename()
-unique(base_antropologia$sd_03)
+unique(base_antropologia$edad)
 
+# Recodifico para dar eliminar nombres mal puestos
+base_antropologia <- base_antropologia %>% mutate(edad=case_when(edad=="23.0"~"23",
+                                            edad=="20.0"~"20",  
+                                            edad=="22.0"~"22",
+                                            edad=="24.0"~"24",
+                                            edad=="21.0"~"21",
+                                            edad=="21 años"~"21", 
+                                            edad=="23 años"~"23",
+                                            edad=="18.0"~"18",
+                                            edad=="41.0"~"41",
+                                            edad=="28.0"~"28",
+                                            edad=="19.0"~"19",
+                                            edad=="27.0"~"27",
+                                            edad=="20 años"~"20",
+                                            edad=="30.0"~"30",
+                                            edad=="25.0"~"25",
+                                            edad=="26.0"~"26",
+                                            edad=="22 años"~"22", 
+                                            edad=="20 años "~"20",
+                                            edad=="19 años "~"19",
+                                            edad=="18 años"~"18",
+                                            edad=="31.0"~"31",
+                                            edad=="40.0"~"40",
+                                            TRUE ~ edad))
+unique(base_antropologia$edad)
 
+#transformo a numérico para luego recodificar en rangos
+base_antropologia$edad <- as.numeric(base_antropologia$edad)
+class(base_antropologia$edad)
 
-unique(base_antropologia$sd_01) # 
-unique(base_antropologia$sd_02) # NOEL 
-table(base_antropologia$sd_03) # NOEL
+#ahora construyo una nueva variable con rangos
+base_antropologia <- base_antropologia %>% 
+  mutate (edad_r= case_when (edad %in% c(18:20) ~ "18 a 20", 
+                            edad %in% c(21:23) ~ "21 a 23", 
+                            edad %in% c(24:29) ~ "24 a 29", 
+                            edad >= 30 ~ "30 o más"))
+
+#compruebo la recodificación
+unique(base_antropologia$edad_r)
+table(base_antropologia$edad_r)
 
 
 unique(base_antropologia$sd_04) # JOAQUÍN 
 unique(base_antropologia$sd_05) # MATÍAS 
-unique(base_antropologia$sd_07) # JOAQUÍN
-unique(base_antropologia$sd_08) # JOAQUÍN
-unique(base_antropologia$sd_09)
-
-names(base_antropologia)
-
 # distancia a la universidad
 # indice de prioridad social
 # zona de la ciudad 
 
-# Estrés académico
-unique(base_antropologia$ea_01)
-unique(base_antropologia$ea_02)
+unique(base_antropologia$sd_07) # JOAQUÍN
+unique(base_antropologia$sd_08) # JOAQUÍN
+unique(base_antropologia$sd_09) # No es necesario hacer nada
 
+# Estrés académico
 
 # ea_01_cuantas_horas_dedica_aproximadamente_al_estudio_y_a_la_realizacion_de_trabajos_universitarios_fuera_del_aula_por_cada_dia_una_semana_habil_esto_es_de_lunes_a_viernes_por_ejemplo_si_lunes_y_martes_suelo_estudiar_mas_o_menos_3_horas_miercoles_5_horas_y_finalmente_jueves_y_viernes_suelo_estudiar_2_horas_el_total_de_horas_es_15_dividido_por_15_por_5_me_da_3_deberia_marcar_la_alternativa_b_3_o_4_horas",
+unique(base_antropologia$ea_01)
 class(base_antropologia$ea_01) # transformar en factor y ordenar: NOEL 
 
 # ea_02_cuantas_horas_dedica_aproximadamente_al_estudio_cada_dia_a_lo_largo_del_fin_de_semana_sabado_y_domingo",
 unique(base_antropologia$ea_02) # transformar en factor y ordenar: NOEL 
+class(base_antropologia$ea_02)
 
 # ea_03_como_describiria_su_carga_academica_actual"
 unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
@@ -263,7 +304,7 @@ unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
 unique(base_antropologia$ea_04) # recodificar a número, recodificar a rangos: MATIAS
 
 # ea_05_que_tan_satisfecho_esta_con_tu_rendimiento_academico_en_el_ultimo_semestre_finalizado_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
-unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
+unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA 
 
 # ea_06_en_una_escala_del_1_al_5_donde_1_es_minimo_estres_y_5_es_maximo_estres_como_calificaria_su_nivel_de_estres_en_la_universidad_en_el_ultimo_semestre_finalizado",
 unique(base_antropologia$ea_06) # recodificar en 2: Joaquín
