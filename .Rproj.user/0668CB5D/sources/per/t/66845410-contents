@@ -6,7 +6,17 @@ pacman::p_load(tidyverse,# Universo de paquetes : tidyr, dplyr, ggplot2,readr,pu
                readxl,# leer archivos xl      #dos formatos de excel xlsx y xl
                janitor,#limpieza de datos
                writexl,#Guardar tablas formato excel
-               DataExplorer) #Exploración rápida
+               DataExplorer, 
+               readr, 
+               forcats,
+               knitr, 
+               gt, 
+               summarytools, 
+               ggthemes, 
+               hrbrthemes, 
+               stringr, 
+               tidyselect, 
+               kableExtra) 
 
 # 2. Importo archivo y lo asigno a environment ----------------------------
 base_antropologia <- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx")
@@ -318,6 +328,58 @@ unique(base_antropologia$ea_08)
 # ea_09_cuando_esta_en_periodos_de_evaluaciones_academicas_ha_tenido_alguno_de_estos_sintomas_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
 unique(base_antropologia$ea_09) # SEBASTIÁN
 class(base_antropologia$ea_09)
+
+
+#separo las respuestas y creo un vector que las lista
+respuestas <- strsplit(base_antropologia$ea_09, ",") # separo las respuestas que tienen coma (,)
+respuestas <- unlist(respuestas) #las unlisto, las saco de una lista
+unique(respuestas)
+
+
+#observo las respuestas
+freq(respuestas, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#elimino espacio antes de primera letra
+respuestas_limpio <- trimws(respuestas, which = "left")
+
+# obtengo las frecuencias de mis preguntas de respuesta múltiple
+freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#Guardo para graficar
+class(ea_09_graf)
+ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) 
+
+# renombro nombre de mi tabla
+ea_09_graf <-  ea_09_graf %>% 
+  rename(Problema = value, Porcentaje= pct)
+
+# realizo gráfico
+ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
+  geom_col() +
+  labs (title = "Problemas derivados del Strees", 
+        subtitle = "según datos de Encuestas Estudianstes Antropología 2024",
+        x = "%",
+        y = "Problema") +
+  geom_text(aes(label = paste0(round(Porcentaje, 1), "%")), #concatena porcentaje con un decimal y "%".
+            hjust = -0.1, size = 4, nudge_x = -.9, fontface= "bold") +
+  scale_fill_viridis_d(option = "C", guide = "none") + 
+  theme_ipsum()
+
+
+ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
+  geom_col() +
+  labs(title = "Síntomas de Estrés Académico",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",
+       y = "Síntoma") +
+  geom_text(data = ea_09_graf %>% filter(rank(-Porcentaje) <= 12), # Solo añadir texto a las primeras 8 categorías
+            aes(label = ifelse(rank(-Porcentaje) <= 12, paste0(round(Porcentaje, 1), "%"), "")),
+            hjust = -0.1, size = 4, nudge_x = -.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
 
 # RESPUESTA MÚLTIPLE 
 
