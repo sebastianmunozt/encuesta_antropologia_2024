@@ -306,8 +306,32 @@ unique(base_antropologia$ea_02)
 # ea_01_cuantas_horas_dedica_aproximadamente_al_estudio_y_a_la_realizacion_de_trabajos_universitarios_fuera_del_aula_por_cada_dia_una_semana_habil_esto_es_de_lunes_a_viernes_por_ejemplo_si_lunes_y_martes_suelo_estudiar_mas_o_menos_3_horas_miercoles_5_horas_y_finalmente_jueves_y_viernes_suelo_estudiar_2_horas_el_total_de_horas_es_15_dividido_por_15_por_5_me_da_3_deberia_marcar_la_alternativa_b_3_o_4_horas",
 class(base_antropologia$ea_01) # transformar en factor y ordenar: NOEL 
 
+#primero la cambio el nombre a la variable
+base_antropologia <- base_antropologia %>% dplyr::rename (horas_estudio_semana = "ea_01"  )
+names(base_antropologia)
+unique(base_antropologia$horas_estudio_semana)
+table(base_antropologia$horas_estudio_semana)
+
+#cambio a factor
+class(base_antropologia$horas_estudio_semana)
+
+base_antropologia <- base_antropologia %>%
+  mutate(horas_estudio_semana = as.factor(horas_estudio_semana))
+
+
 # ea_02_cuantas_horas_dedica_aproximadamente_al_estudio_cada_dia_a_lo_largo_del_fin_de_semana_sabado_y_domingo",
 unique(base_antropologia$ea_02) # transformar en factor y ordenar: NOEL 
+
+#primero la cambio el nombre a la variable
+base_antropologia <- base_antropologia %>% dplyr::rename (horas_estudio_fin_semana = "ea_02"  )
+names(base_antropologia)
+unique(base_antropologia$edad)
+
+#cambio a factor
+class(base_antropologia$horas_estudio_semana)
+
+base_antropologia <- base_antropologia %>%
+  mutate(horas_estudio_fin_semana = as.factor(horas_estudio_fin_semana))
 
 # ea_03_como_describiria_su_carga_academica_actual"
 unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
