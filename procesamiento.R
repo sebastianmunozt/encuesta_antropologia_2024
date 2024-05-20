@@ -356,6 +356,62 @@ unique(base_antropologia$ea_09) # SEBASTIÁN
 class(base_antropologia$ea_09)
 
 # RESPUESTA MÚLTIPLE 
+# ea_09_cuando_esta_en_periodos_de_evaluaciones_academicas_ha_tenido_alguno_de_estos_sintomas_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
+unique(base_antropologia$ea_09) # SEBASTIÁN
+class(base_antropologia$ea_09)
+
+
+#separo las respuestas y creo un vector que las lista
+respuestas <- strsplit(base_antropologia$ea_09, ",") # separo las respuestas que tienen coma (,)
+respuestas <- unlist(respuestas) #las unlisto, las saco de una lista
+unique(respuestas)
+
+
+#observo las respuestas
+freq(respuestas, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#elimino espacio antes de primera letra
+respuestas_limpio <- trimws(respuestas, which = "left")
+
+# obtengo las frecuencias de mis preguntas de respuesta múltiple
+freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#Guardo para graficar
+ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Síntoma", "Frecuencia", "%", "% Acumulado"),
+        caption = "Síntomas de Estress", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
+
+
+
+# renombro nombre de mi tabla
+ea_09_graf <-  ea_09_graf %>% 
+  rename(Problema = value, Porcentaje= pct)
+
+# realizo gráfico
+g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
+  geom_col() +
+  labs(title = "Síntomas de Estrés Académico",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",
+       y = "Síntoma") +
+  geom_text(data = ea_09_graf %>% filter(rank(-Porcentaje) <= 12), # Solo añadir texto a las primeras 8 categorías
+            aes(label = ifelse(rank(-Porcentaje) <= 12, paste0(round(Porcentaje, 1), "%"), "")),
+            hjust = 1, size = 3, nudge_x = -.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+
+
+ggsave("outputs/g_ea_09_graf.png", plot = g_ea_09_graf, width = 10, height = 7, dpi = 300)
 
 # ea_10_que_estrategias_utiliza_con_mayor_frecuencia_para_manejar_el_estres_academico_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
 unique(base_antropologia$ea_10) # NOEL 
