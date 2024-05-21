@@ -303,9 +303,91 @@ str(base_antropologia)
 
 
 unique(base_antropologia$sd_04) # JOAQUÍN 
+
+base_antropologia <- base_antropologia %>% dplyr::rename(año_ingreso_carrera = sd_04)
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(año_ingreso_carrera=case_when(año_ingreso_carrera == 2019 ~ "pre-pandemia",
+                                       año_ingreso_carrera == 2020 ~ "Pandemia",
+                                       año_ingreso_carrera == 2021 ~ "Pandemia",
+                                       año_ingreso_carrera == 2022 ~ "post-pandemia",
+                                       año_ingreso_carrera == 2023 ~ "post-pandemia",
+                                       año_ingreso_carrera == 2024 ~ "post-pandemia"
+                                       ))
+
+
+unique(base_antropologia$año_ingreso_carrera)
+
+table(base_antropologia$año_ingreso_carrera)
+
+
+
 unique(base_antropologia$sd_05) # MATÍAS 
+
+
+
 unique(base_antropologia$sd_07) # JOAQUÍN
+
+base_antropologia <- base_antropologia %>%
+  mutate(
+    sd_07 = stringi::stri_trans_general(sd_07, "Latin-ASCII"),
+    sd_07 = tolower(sd_07),  
+    sd_07 = gsub(" ", "_", sd_07),
+    sd_07 = gsub("-+$", "", sd_07),
+  )
+
+base_antropologia <- base_antropologia %>% dplyr::rename(nivel_educacion_padre= sd_07)
+
+base_antropologia <- base_antropologia %>%
+  mutate(nivel_educacion_padre=case_when(nivel_educacion_padre ==  "profesional_(carreras_4_o_mas_anos)" ~ "Educacion Profesional",
+                                         nivel_educacion_padre == "magister_o_maestria" ~ "Educacion Profesional",
+                                         nivel_educacion_padre == "doctorado" ~ "Educacion Profesional",
+                                         nivel_educacion_padre == "tecnico_nivel_superior_(carreras_1_a_3_anos)" ~"Educacion Tecnica",
+                                         nivel_educacion_padre ==  "educacion_media_tecnica_profesional" ~ "Educacion Tecnica",
+                                         nivel_educacion_padre == "educacion_media" ~ "Educacion Media",
+                                         nivel_educacion_padre == "educacion_basica_" ~ "Educacion Basica",
+                                         nivel_educacion_padre == "ensenanza_basica_completa" ~ "Educacion Basica",
+                                         nivel_educacion_padre == "educacion_basica_completa_" ~ "Educacion Basica",
+                                         nivel_educacion_padre == "educacion_basica_hasta_sexto_" ~ "Educacion Basica",
+                                         nivel_educacion_padre == "no_se_"  ~ NA,
+                                         nivel_educacion_padre == "no_se" ~ NA,
+                                         nivel_educacion_padre == "sin_figura_paterna_" ~ NA,
+                                         TRUE ~ nivel_educacion_padre))
+
+unique(base_antropologia$nivel_educacion_padre)
+
+table(base_antropologia$nivel_educacion_padre)
+
+
+
 unique(base_antropologia$sd_08) # JOAQUÍN
+
+base_antropologia <- base_antropologia %>%
+  mutate(
+    sd_08 = stringi::stri_trans_general(sd_08, "Latin-ASCII"),
+    sd_08 = tolower(sd_08),  
+    sd_08 = gsub(" ", "_", sd_08),
+    sd_08 = gsub("-+$", "", sd_08),
+  )
+base_antropologia <- base_antropologia %>% dplyr::rename(nivel_educacion_madre= sd_08)
+
+base_antropologia <- base_antropologia %>%
+  mutate(nivel_educacion_madre=case_when(nivel_educacion_madre ==  "profesional_(carreras_4_o_mas_anos)" ~ "Educacion Profesional",
+                                         nivel_educacion_madre == "magister_o_maestria" ~ "Educacion Profesional",
+                                         nivel_educacion_madre == "doctorado" ~ "Educacion Profesional",
+                                         nivel_educacion_madre == "tecnico_nivel_superior_(carreras_1_a_3_anos)" ~"Educacion Tecnica",
+                                         nivel_educacion_madre ==  "educacion_media_tecnica_profesional" ~ "Educacion Tecnica",
+                                         nivel_educacion_madre == "educacion_media" ~ "Educacion Media",
+                                         nivel_educacion_madre == "profesional_incompleto" ~ "Educacion Media",
+                                         nivel_educacion_madre == "educacion_media_incompleta" ~ "Educacion Básica",
+                                         TRUE ~ nivel_educacion_madre))
+
+unique(base_antropologia$nivel_educacion_madre)
+
+table(base_antropologia$nivel_educacion_madre)
+
+
 unique(base_antropologia$sd_09)
 
 names(base_antropologia)
@@ -391,8 +473,48 @@ table(base_antropologia$satisfaccion_rendimiento_academico)
 # ea_06_en_una_escala_del_1_al_5_donde_1_es_minimo_estres_y_5_es_maximo_estres_como_calificaria_su_nivel_de_estres_en_la_universidad_en_el_ultimo_semestre_finalizado",
 unique(base_antropologia$ea_06) # recodificar en 2: Joaquín
 
+base_antropologia <- base_antropologia %>% dplyr::rename(nivel_estres_ultimo_semestre = ea_06)
+
+base_antropologia <- base_antropologia %>%
+  mutate(nivel_estres_ultimo_semestre=case_when(nivel_estres_ultimo_semestre == 1 ~ "Estres Moderado",
+                                                nivel_estres_ultimo_semestre == 2 ~ "Estres Moderado",
+                                                nivel_estres_ultimo_semestre == 3 ~ "Estres Moderado",
+                                                nivel_estres_ultimo_semestre == 4 ~ "Estres Alto",
+                                                nivel_estres_ultimo_semestre == 5 ~ "Estres Alto",
+                                                ))
+
+base_antropologia <- base_antropologia %>%
+  mutate(nivel_estres_ultimo_semestre= factor(nivel_estres_ultimo_semestre, levels = c("Estres Moderado", 
+                                                                                       "Estres Alto" ), ordered = TRUE))
+
+unique(base_antropologia$nivel_estres_ultimo_semestre)
+
+table(base_antropologia$nivel_estres_ultimo_semestre)
+
+
 # ea_07_en_que_medidas_el_estres_afecta_su_rendimiento_academico",
 unique(base_antropologia$ea_07) # recodificar en 2: Joaquín
+
+ase_antropologia <- base_antropologia %>% dplyr::rename(efecto_estres_rendimiento = ea_07)
+
+base_antropologia <- base_antropologia %>%
+  mutate(efecto_estres_rendimiento=case_when(efecto_estres_rendimiento == "Mucho" ~ "Bastante",
+                                             efecto_estres_rendimiento == "Bastante" ~ "Bastante",
+                                             efecto_estres_rendimiento == "Moderado" ~ "Moderamante",
+                                             efecto_estres_rendimiento == "Poco" ~ "Moderamante"
+  ))
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(efecto_estres_rendimiento= factor(efecto_estres_rendimiento, levels = c("Moderamante", 
+                                                                                 "Bastante"
+  ), ordered = TRUE))
+
+unique(base_antropologia$efecto_estres_rendimiento)
+
+table(base_antropologia$efecto_estres_rendimiento)
+
+
 
 # ea_08_puede_identificar_por_si_mismo_cuando_se_siente_estresado_debidos_a_factores_relacionados_con_el_ambito_universitario",
 unique(base_antropologia$ea_08)
