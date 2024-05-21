@@ -634,10 +634,11 @@ class(base_antropologia$notas_ultimo_semestre)
 table(base_antropologia$notas_ultimo_semestre)
 
 base_antropologia <- base_antropologia %>% 
-  mutate (notas_ultimo_semestre_intervalo= case_when (notas_ultimo_semestre %in% c(4.0:4.9) ~ "4.0 a 4.9", 
-                                                      notas_ultimo_semestre %in% c(5.0:5.9) ~ "5.0 a 5.9", 
-                                                      notas_ultimo_semestre %in% c(6.0:7.0) ~ "6.0 a 7.0", 
-  ))
+  mutate (notas_ultimo_semestre_intervalo= case_when (notas_ultimo_semestre >= 4 & notas_ultimo_semestre < 5 ~ "4.0 a 4.9", 
+                                                      notas_ultimo_semestre >= 5 & notas_ultimo_semestre < 6  ~ "5.0 a 5.9", 
+                                                      notas_ultimo_semestre >= 6 & notas_ultimo_semestre < 7 ~ "6.0 a 7.0", 
+                                                      ))
+
 
 table(base_antropologia$notas_ultimo_semestre_intervalo)
 
