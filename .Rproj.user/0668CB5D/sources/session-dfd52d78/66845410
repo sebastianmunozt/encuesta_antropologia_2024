@@ -1,9 +1,9 @@
 {
     "id": "66845410",
-    "path": "C:/Users/sebastian/Desktop/PRODUCCION/00. ACCIÓN PROXIMA/03. CUANTI/Curso Cuanti 2/Curso UAH/2024/Encuesta_Antropologia_2024/encuesta_antropologia_2024/procesamiento.R",
-    "project_path": "procesamiento.R",
+    "path": "C:/Users/sebastian/Desktop/PRODUCCION/00. ACCIÓN PROXIMA/03. CUANTI/Curso Cuanti 2/Curso UAH/2024/Encuesta_Antropologia_2024/procesamiento.R",
+    "project_path": null,
     "type": "r_source",
-    "hash": "1548620081",
+    "hash": "3987032128",
     "contents": "",
     "dirty": false,
     "created": 1715897311680.0,
@@ -13,15 +13,17 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "413,0",
-        "scrollLine": "388"
+        "cursorPosition": "599,0",
+        "scrollLine": "577",
+        "docOutlineVisible": "1",
+        "docOutlineSize": "242"
     },
     "folds": "",
-    "lastKnownWriteTime": 1716294191,
+    "lastKnownWriteTime": 1716303794,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1716294191,
+    "last_content_update": 1716303794996,
     "read_only": false,
     "read_only_alternatives": []
 }
