@@ -8,6 +8,9 @@ pacman::p_load(tidyverse,# Universo de paquetes : tidyr, dplyr, ggplot2,readr,pu
                writexl,#Guardar tablas formato excel
                DataExplorer) #Exploración rápida
 
+pacman::p_load(tidyverse, openxlsx, readxl,readr,janitor, forcats, writexl, DataExplorer, 
+               datos,  knitr, gt, summarytools, ggthemes, hrbrthemes, foreign, DescTools, ineq)
+
 # 2. Importo archivo y lo asigno a environment ----------------------------
 base_antropologia <- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx")
 libro_codigos<- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx") # dejo una base sin limpiar para observar nombres de preguntas
@@ -389,6 +392,11 @@ ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = F
   kable_classic(full_width = F, html_font = "Cambria") %>% 
   save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
 
+install.packages("kableExtra")
+library("kableExtra")
+
+install.packages("webshot2")
+library("webshot2")
 
 
 # renombro nombre de mi tabla
