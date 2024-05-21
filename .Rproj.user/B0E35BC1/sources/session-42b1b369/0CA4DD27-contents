@@ -132,93 +132,90 @@ print(valores_unicos_descendentes)
 
 #hago un proceso de recodificación: por ejemplo con Alejandra Mondaca, Alonso silva y Amanda Baez (SEGUIR!)
 base_antropologia <- base_antropologia %>%
-  mutate(n_encuestador=case_when(n_encuestador== "alejandra_"~ "Alejandra Mondaca",
+  mutate(n_encuestador=case_when(n_encuestador=="carla_(buffy)" ~ "Alejandra Mondaca",
+                                 n_encuestador=="alexi" ~ "Alejandra Mondaca",
                                  n_encuestador=="alejandra_mondaca" ~ "Alejandra Mondaca",
                                  n_encuestador=="alejandra_mondaca_" ~ "Alejandra Mondaca",
-                                 n_encuestador=="alonso_silva" ~ "Alonso Silva",
+                                 n_encuestador=="alonso_silva" ~ "Alonso Silva", 
                                  n_encuestador=="alonso_silva_" ~ "Alonso Silva",
                                  n_encuestador=="amanda_baez" ~ "Amanda Baez",
                                  n_encuestador=="amanda_baez_" ~ "Amanda Baez",
-                                 TRUE ~n_encuestador))
+                                 n_encuestador=="antonia_ramirez_" ~ "Antonia Ramirez",
+                                 n_encuestador=="camila_crisostomo" ~ "Camila Crisostomo",
+                                 n_encuestador=="camila_segura" ~ "Camila Segura",
+                                 n_encuestador=="catalina_" ~ "Catalina Fuentes",
+                                 n_encuestador=="catalina_fuentes" ~ "Catalina Fuentes",
+                                 n_encuestador=="consuelo_llanten_" ~ "Consuelo Llanten",
+                                 n_encuestador=="consuelo_llanten" ~ "Consuelo Llanten",
+                                 n_encuestador=="alejandra_"~ "Daniela Pasmino",
+                                 n_encuestador=="daniela_berrios" ~ "Daniela Pasmino",
+                                 n_encuestador=="daniela_pasmino" ~ "Daniela Pasmino",
+                                 n_encuestador=="florencia_martin" ~"Florencia Martin",
+                                 n_encuestador=="florencia_martin_" ~ "Florencia Martin",
+                                 n_encuestador=="gabriel_concha" ~ "Gabriel Concha",
+                                 n_encuestador=="gabriel_concha_" ~ "Gabriel Concha",
+                                 n_encuestador=="gonzalo" ~ "Gonzalo Munoz",
+                                 n_encuestador=="gonzalo_" ~ "Gonzalo Munoz",
+                                 n_encuestador=="gonzalo_munoz" ~ "Gonzalo Munoz",
+                                 n_encuestador=="gonzalo_munoz_oliva_" ~ "Gonzalo Munoz",
+                                 n_encuestador=="isidora_aros" ~ "Isidora Aros",
+                                 n_encuestador=="isidora_aros_" ~ "Isidora Aros",
+                                 n_encuestador=="joaquin" ~ "Joaquin Castillo",
+                                 n_encuestador=="joaquin_" ~ "Joaquin Castillo",
+                                 n_encuestador=="joaquin_castillo" ~ "Joaquin Castillo",
+                                 n_encuestador=="yakim_" ~ "Joaquin Castillo",
+                                 n_encuestador=="javiera_herrera" ~ "Javiera Herrera",
+                                 n_encuestador=="joaquin_orellana_" ~ "Joaquin Orellana",
+                                 n_encuestador=="juan" ~ "Joaquin Orellana",
+                                 n_encuestador=="julia_sotomayor"~ "Julia Sotomayor",
+                                 n_encuestador=="elisa_monsalve_"~ "Julia Sotomayor",
+                                 n_encuestador=="escarleth_"~ "Julia Sotomayor",
+                                 n_encuestador=="franco" ~ "Julia Sotomayor",
+                                 n_encuestador== "krishna_asencio" ~ "Krishna Asencio", 
+                                 n_encuestador== "krishna_asencio_" ~ "Krishna Asencio", 
+                                 n_encuestador=="antonia_leiva" ~ "Mariana Perez",
+                                 n_encuestador=="mariana_perez" ~ "Mariana Perez",
+                                 n_encuestador=="mariana_perez_" ~ "Mariana Perez",
+                                 n_encuestador== "pablo_cornejo" ~ "Mariana Perez", 
+                                 n_encuestador== "martin_campusano" ~ "Martin Campusano", 
+                                 n_encuestador== "martin_cifuentes" ~ "Martin Cifuentes", 
+                                 n_encuestador== "matilde_cespedes" ~ "Matilde Cespedes", 
+                                 n_encuestador== "matilde_cespedes_" ~ "Matilde Cespedes", 
+                                 n_encuestador== "antonia_" ~ "Noel Casas-Cordero",
+                                 n_encuestador== "noel_casas-cordero"~ "Noel Casas-Cordero",
+                                 n_encuestador== "oliver_delherbe" ~ "Oliver Delherbe", 
+                                 n_encuestador== "olivier_delherbe" ~ "Oliver Delherbe", 
+                                 n_encuestador== "patricia_gonzalez" ~ "Patricia Gonzalez", 
+                                 n_encuestador== "patricia_gonzalez_" ~ "Patricia Gonzalez", 
+                                 n_encuestador== "pedro_villaroel" ~ "Pedro Villaroel", 
+                                 n_encuestador== "pedro_villarroel" ~ "Pedro Villaroel", 
+                                 n_encuestador== "martina_" ~ "Pedro Villaroel", 
+                                 n_encuestador== "samanta_letelier" ~ "Samanta Letelier", 
+                                 n_encuestador== "samanta_letelier_" ~ "Samanta Letelier", 
+                                 n_encuestador== "sofia_ballerino" ~ "Sofia Ballerino", 
+                                 n_encuestador== "sofia_ballerino_" ~ "Sofia Ballerino",
+                                 n_encuestador== "valentina" ~ "Valentina Gonzalez",
+                                 n_encuestador== "valentina_gonzalez" ~ "Valentina Gonzalez",
+                                 n_encuestador== "valentina_gonzalez_" ~ "Valentina Gonzalez",
+                                 n_encuestador== "valeria_carvajal" ~ "Valeria Carvajal",
+                                 n_encuestador== "valeria_carvajal_donoso" ~ "Valeria Carvajal",
+                                 n_encuestador== "valeria_carvajal_" ~ "Valeria Carvajal",
+                                 n_encuestador== "josefina_ahuile_munoz" ~ "Valeria Carvajal",
+                                 n_encuestador== "farid_halaby" ~ "Valeria Carvajal",
+                                 n_encuestador== "venecia" ~ "Venecia Moreno",
+                                 n_encuestador== "venecia_moreno" ~ "Venecia Moreno",
+                                 n_encuestador== "veronica_moya" ~ "Veronica Moya",
+                                 n_encuestador== "veronica_moya_" ~ "Veronica Moya",
+                                 n_encuestador== "veronica_paz_moya_rosas" ~ "Veronica Moya",
+                                 n_encuestador== "victor" ~ "Victor Avalos",
+                                 n_encuestador== "victor_avalos" ~ "Victor Avalos",
+                                 n_encuestador== "ignacia_fica" ~ "Ricardo Quiroz",
+                                 n_encuestador== "vicente" ~ "Consuelo Llanten",
+                                 n_encuestador== "noel_casas_-cordero_y_samanta_letelier_" ~ "Amanda Baez",
+                                 n_encuestador== "benjamin_(iris)" ~ "Venecia Moreno",
+                                 TRUE ~ n_encuestador))
 table(base_antropologia$n_encuestador)
 
-# ir sacando los nombres desde acá
-                      
-                                 "alexi" ~ "alexi",
-                                 "antonia_" ~ "antonia_", 
-                                 "antonia_leiva"
-                                 "antonia_ramirez_"
-                                 "benjamin_(iris)"
-                                 "camila_crisostomo"
-                                 "camila_segura"
-                                 "carla_(buffy)"
-                                 "catalina_"
-                                 "catalina_fuentes"
-                                 "consuelo_llanten"
-                                 "consuelo_llanten_"
-                                 "daniela_berrios"
-                                 "daniela_pasmino"
-                                 "elisa_monsalve_"
-                                 "escarleth_"
-                                 "farid_halaby"
-                                 "florencia_martin"
-                                 "florencia_martin_"
-                                 "franco"
-                                 "gabriel_concha"
-                                 "gabriel_concha_"
-                                 "gonzalo"
-                                 "gonzalo_"
-                                 "gonzalo_munoz"
-                                 "gonzalo_munoz_oliva_"
-                                 "ignacia_fica"
-                                 "isidora_aros"
-                                 "isidora_aros_"
-                                 "javiera_herrera"
-                                 "joaquin"
-                                 "joaquin_"
-                                 "joaquin_castillo"
-                                 "joaquin_orellana_"
-                                 "josefina_ahuile_munoz"
-                                 "juan"
-                                 "julia_sotomayor"
-                                 "krishna_asencio"
-                                 "krishna_asencio_"
-                                 "mariana_perez"
-                                 "mariana_perez_"
-                                 "martin_campusano"
-                                 "martin_cifuentes"
-                                 "martina_"
-                                 "matilde_cespedes"
-                                 "matilde_cespedes_"
-                                 "noel_casas-cordero"
-                                 "noel_casas_-cordero_y_samanta_letelier_"
-                                 "oliver_delherbe"
-                                 "olivier_delherbe"
-                                 "pablo_cornejo"
-                                 "patricia_gonzalez"
-                                 "patricia_gonzalez_"
-                                 "pedro_villaroel"
-                                 "pedro_villarroel"
-                                 "samanta_letelier"
-                                 "samanta_letelier_"
-                                 "sofia_ballerino"
-                                 "sofia_ballerino_"
-                                 "valentina"
-                                 "valentina_gonzalez"
-                                 "valentina_gonzalez_"
-                                 "valeria_carvajal"
-                                 "valeria_carvajal_"
-                                 "valeria_carvajal_donoso"
-                                 "venecia"
-                                 "venecia_moreno"
-                                 "veronica_moya"
-                                 "veronica_moya_"
-                                 "veronica_paz_moya_rosas"
-                                 "vicente"
-                                 "victor"
-                                 "victor_avalos"
-                                 "yakim_"
-                          
 
 
 # renombro las sociodemográficas: 
@@ -354,11 +351,42 @@ base_antropologia <- base_antropologia %>%
 # ea_03_como_describiria_su_carga_academica_actual"
 unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
 
+unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
+
+base_antropologia <- base_antropologia %>% dplyr::rename(descripcion_carga_academica = ea_03)
+names(base_antropologia)
+class(base_antropologia$descripcion_carga_academica)
+
+base_antropologia <- base_antropologia %>% 
+  mutate(descripcion_carga_academica = as.factor(descripcion_carga_academica))
+unique(base_antropologia$descripcion_carga_academica)
+
+
+
 # ea_04_en_el_ultimo_semestre_finalizado_aproximadamente_que_promedio_de_notas_ha_obtenido_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
 unique(base_antropologia$ea_04) # recodificar a número, recodificar a rangos: MATIAS
 
 # ea_05_que_tan_satisfecho_esta_con_tu_rendimiento_academico_en_el_ultimo_semestre_finalizado_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
 unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
+
+unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
+
+base_antropologia <- base_antropologia %>% dplyr::rename(satisfaccion_rendimiento_academico = ea_05)
+names(base_antropologia)
+unique(base_antropologia$satisfaccion_rendimiento_academico)
+table(base_antropologia$satisfaccion_rendimiento_academico)
+class(base_antropologia$satisfaccion_rendimiento_academico)
+base_antropologia <- base_antropologia %>% 
+  mutate(satisfaccion_rendimiento_academico = as.factor(satisfaccion_rendimiento_academico))
+
+base_antropologia <- base_antropologia %>% 
+  mutate(satisfaccion_rendimiento_academico = case_when(satisfaccion_rendimiento_academico== "Insatisfecho" ~ "Insatisfecho",
+                                                        satisfaccion_rendimiento_academico== "Muy insatisfecho" ~ "Insatisfecho",
+                                                        satisfaccion_rendimiento_academico== "Muy Satisfecho" ~ "Satisfecho",
+                                                        satisfaccion_rendimiento_academico== "Satisfecho" ~ "Satisfecho"))
+
+table(base_antropologia$satisfaccion_rendimiento_academico)
+
 
 # ea_06_en_una_escala_del_1_al_5_donde_1_es_minimo_estres_y_5_es_maximo_estres_como_calificaria_su_nivel_de_estres_en_la_universidad_en_el_ultimo_semestre_finalizado",
 unique(base_antropologia$ea_06) # recodificar en 2: Joaquín
@@ -407,6 +435,9 @@ ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = F
         format = "html", digits = 2) %>%  #le doy formate con kable
   kable_classic(full_width = F, html_font = "Cambria") %>% 
   save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
+
+
+webshot::install_phantomjs(force = TRUE)
 
 
 # renombro nombre de mi tabla
