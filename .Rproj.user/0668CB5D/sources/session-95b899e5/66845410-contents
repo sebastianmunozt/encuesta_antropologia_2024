@@ -325,10 +325,9 @@ unique(base_antropologia$ea_02) # transformar en factor y ordenar: NOEL
 #primero la cambio el nombre a la variable
 base_antropologia <- base_antropologia %>% dplyr::rename (horas_estudio_fin_semana = "ea_02"  )
 names(base_antropologia)
-unique(base_antropologia$edad)
 
 #cambio a factor
-class(base_antropologia$horas_estudio_semana)
+class(base_antropologia$horas_estudio_fin_semana)
 
 base_antropologia <- base_antropologia %>%
   mutate(horas_estudio_fin_semana = as.factor(horas_estudio_fin_semana))
