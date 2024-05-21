@@ -8,6 +8,9 @@ pacman::p_load(tidyverse,# Universo de paquetes : tidyr, dplyr, ggplot2,readr,pu
                writexl,#Guardar tablas formato excel
                DataExplorer) #Exploración rápida
 
+pacman::p_load(tidyverse, openxlsx, readxl,readr,janitor, forcats, writexl, DataExplorer, 
+               datos,  knitr, gt, summarytools, ggthemes, hrbrthemes, foreign, DescTools, ineq)
+
 # 2. Importo archivo y lo asigno a environment ----------------------------
 base_antropologia <- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx")
 libro_codigos<- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx") # dejo una base sin limpiar para observar nombres de preguntas
@@ -428,6 +431,7 @@ freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>%
 ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
 
+
 ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb() %>%
   kable(col.names = c("Síntoma", "Frecuencia", "%", "% Acumulado"),
@@ -436,13 +440,10 @@ ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = F
   kable_classic(full_width = F, html_font = "Cambria") %>% 
   save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
 
-
-webshot::install_phantomjs(force = TRUE)
-
-
 # renombro nombre de mi tabla
 ea_09_graf <-  ea_09_graf %>% 
   rename(Problema = value, Porcentaje= pct)
+
 
 # realizo gráfico
 g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
@@ -457,15 +458,79 @@ g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema,
   scale_fill_viridis_d(option = "C", guide = "none") +
   theme_ipsum()
 
-
-
 ggsave("outputs/g_ea_09_graf.png", plot = g_ea_09_graf, width = 10, height = 7, dpi = 300)
 
 # ea_10_que_estrategias_utiliza_con_mayor_frecuencia_para_manejar_el_estres_academico_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
 unique(base_antropologia$ea_10) # NOEL 
 
+#Preguntas de respuesta multiple
+
+unique(base_antropologia$ea_10)
+class(base_antropologia$ea_10)
+
+#tuve que cambiar una categoría porque tenía una "," y al sperar las opciones dentro de la resúesta
+#tambien cortaba un parantesis que tenias comas, así que lo cambie a un "/"
+
+base_antropologia <- base_antropologia %>%
+  mutate(ea_10 = case_when(
+    grepl("Participar en otras actividades creativas \\(música, arte, escritura\\)", ea_10) ~
+      gsub("Participar en otras actividades creativas \\(música, arte, escritura\\)", 
+           "Participar en otras actividades creativas (música/arte/escritura)", 
+           ea_10),
+    TRUE ~ ea_10
+  ))
+
+#separo las respuestas y creo un vector que las lista
+respuestas_ea_10 <- unlist(strsplit(base_antropologia$ea_10, ", ")) # separo las respuestas que tienen coma (,)
+
+#hice la lista altiro
+unique(respuestas_ea_10)
 
 
+#observo las respuestas
+freq(respuestas_ea_10, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#elimino espacio antes de primera letra
+respuestas_ea_10_limpio <- trimws(respuestas_ea_10, which = "left")
+
+# obtengo las frecuencias de mis preguntas de respuesta múltiple
+freq(respuestas_ea_10_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#Guardo para graficar
+ea_10_graf <- freq(respuestas_ea_10_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+ea_10_tabla <- freq(respuestas_ea_10_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Estrategias", "Frecuencia", "%", "% Acumulado"),
+        caption = "Estrategias del manejo del estres", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/ea_10_tabla.png", zoom = 3)
+
+install.packages("kableExtra")
+library(kableExtra)
+
+ea_10_graf <-  ea_10_graf %>% 
+  rename(Problema = value, Porcentaje= pct)
+
+
+
+g_ea_10_graf <- ggplot(ea_10_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
+  geom_col() +
+  labs(title = "Estrategias del manejo del estres",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",
+       y = "Estrategia") +
+  geom_text(data = ea_10_graf %>% filter(rank(-Porcentaje) <= 12), # Solo añadir texto a las primeras 8 categorías
+            aes(label = ifelse(rank(-Porcentaje) <= 12, paste0(round(Porcentaje, 1), "%"), "")),
+            hjust = 1, size = 3, nudge_x = -.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+ggsave("outputs/g_ea_10_graf.png", plot = g_ea_10_graf, width = 10, height = 7, dpi = 300)
 
 # Exportar ----------------------------------------------------------------
 
