@@ -1,6 +1,6 @@
 
 # 1. Instalo y abro paquetes -------------------------------------------------
-# install.packages("pacman")
+ install.packages("pacman")
 pacman::p_load(tidyverse,# Universo de paquetes : tidyr, dplyr, ggplot2,readr,purrr,tibble, stringr, forcats
                openxlsx,#leer archivos xlsx
                readxl,# leer archivos xl      #dos formatos de excel xlsx y xl
@@ -140,6 +140,7 @@ base_antropologia <- base_antropologia %>%
                                  n_encuestador=="amanda_baez" ~ "Amanda Baez",
                                  n_encuestador=="amanda_baez_" ~ "Amanda Baez",
                                  TRUE ~n_encuestador))
+
 base_antropologia <- base_antropologia %>%
   mutate(n_encuestador=case_when(n_encuestador=="carla_(buffy)" ~ "Alejandra Mondaca",
                                  n_encuestador=="alexi" ~ "Alejandra Mondaca",
@@ -175,7 +176,7 @@ base_antropologia <- base_antropologia %>%
                                  n_encuestador=="yakim_" ~ "Joaquin Castillo",
                                  n_encuestador=="javiera_herrera" ~ "Javiera Herrera",
                                  n_encuestador=="joaquin_orellana_" ~ "Joaquin Orellana",
-                                 n_encuestador=="juan" ~ "Joaquin Orellana"
+                                 n_encuestador=="juan" ~ "Joaquin Orellana",
                                  n_encuestador=="julia_sotomayor"~ "Julia Sotomayor",
                                  n_encuestador=="elisa_monsalve_"~ "Julia Sotomayor",
                                  n_encuestador=="escarleth_"~ "Julia Sotomayor",
