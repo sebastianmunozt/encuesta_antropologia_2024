@@ -317,6 +317,70 @@ table(base_antropologia$año_ingreso_carrera_r)
 # Realizada por Matías
 unique(base_antropologia$sd_05) 
 
+#primero la cambio el nombre a la variable
+base_antropologia <- base_antropologia %>% dplyr::rename (comuna =sd_05)
+
+comunas <- freq(base_antropologia$comuna, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(
+    comuna = stringi::stri_trans_general(comuna, "Latin-ASCII"),  # Convierte caracteres latinos en la columna `comuna` a su equivalente ASCII
+    comuna = tolower(comuna),  # Convierte todos los caracteres en la columna `comuna` a minúsculas
+    comuna = gsub(" ", "_", comuna),  # Reemplaza espacios por guiones bajos en la columna `comuna`
+  )
+
+
+unique(base_antropologia$comuna) #observo mucha variedad de como se escriben los nombres. 
+
+# voy a recodificar los nombres, para ello hago lo siguiente:
+# a) hago un listado de los nombres 
+valores_unicos_a<- sort(unique(base_antropologia$comuna), decreasing = F)
+
+#imprimo los valores ordenados, para verlos, copiarlos y recodificarlos. 
+print(valores_unicos_a)
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(comuna = sub("_$", "", comuna))
+
+unique(base_antropologia$comuna)
+
+
+
+# Recodificando la variable comuna en comuna_r1 según las zonas geográficas
+base_antropologia <- base_antropologia %>%
+  mutate(comuna_r1 = case_when(
+    comuna %in% c("quilicura", "huechuraba", "recoleta", "conchali", "renca", "lampa", "cerro_navia") ~ "Zona Norte",
+    comuna %in% c("la_pintana", "puente_alto", "san_bernardo", "la_granja", "la_cisterna", "lo_espejo", "pedro_aguirre_cerda", "san_miguel", "san_joaquin", "paine", "la_florida") ~ "Zona Sur",
+    comuna %in% c("las_condes", "la_reina", "vitacura", "penalolen", "nunoa", "providencia", "macul") ~ "Zona Oriente",
+    comuna %in% c("maipu", "pudahuel", "quinta_normal", "lo_prado", "estacion_central", "curacavi", "melipilla", "talagante", "calera_de_tango", "buin", "penaflor") ~ "Zona Poniente",
+    comuna %in% c("la_serena", "llay_llay", "los_andes", "rancagua", "san_felipe", "til_til") ~ "Fuera de la Región Metropolitana",
+    comuna %in% c("santa_lucia", "santiago_centro") ~ "Zona Centro",
+    TRUE ~ comuna  # Mantiene el nombre original si no está en ninguna categoría
+  ))
+
+freq(base_antropologia$comuna_r1, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+
+# recodifico por distancia a la universidad
+base_antropologia <- base_antropologia %>%
+  mutate(comuna_distancia = case_when(
+    comuna %in% c("santiago_centro", "providencia", "estacion_central", "quinta_normal", "recoleta", "santa_lucia") ~ "Vive muy cerca",
+    comuna %in% c("nunoa", "san_miguel", "la_cisterna", "conchali", "lo_prado", "pedro_aguirre_cerda", "la_granja", "lo_espejo") ~ "Vive a distancia cercana",
+    comuna %in% c("macul", "la_florida", "penalolen", "maipu", "pudahuel", "san_joaquin", "renca", "cerro_navia", "quilicura", "huechuraba", "vitacura", "las_condes", "la_reina") ~ "Vive a distancia media",
+    comuna %in% c("puente_alto", "la_pintana", "san_bernardo", "buin", "talagante", "penaflor", "curacavi", "lampa", "melipilla", "calera_de_tango", "til_til", "paine") ~ "Vive a mucha distancia",
+    TRUE ~ "Fuera de Santiago" # Para cualquier comuna no listada
+  ))
+
+
+freq(base_antropologia$comuna_distancia, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+
+
 # Considerar posibles recodificaciones: 
 # a) distancia a la universidad
 # b) indice de prioridad social
