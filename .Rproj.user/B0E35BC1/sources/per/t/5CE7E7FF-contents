@@ -2,6 +2,7 @@
 
 pacman::p_load(tidyverse, openxlsx, readxl,readr,janitor, forcats, writexl, DataExplorer, 
                datos,  knitr, gt, summarytools, ggthemes, hrbrthemes, foreign, DescTools, ineq)
+
 #foreign: para leer spss. Varios paquetes para leer bases. 
 #DescTools: para hacer análisis como la Moda
 #ineq: inequidades
@@ -33,13 +34,14 @@ mean(datos$y1, na.rm = TRUE) #remover casos NA!
 
 
 #realicelo para edad: 
-# mean(datos$______, na.rm = ______) 
+mean(datos$edad, na.rm = TRUE) 
 
 #tidyverse
 datos %>%
   summarise(media_y1 = mean(y1, na.rm = TRUE))
 
 #realicelo para edad:
+
 # datos %>%
 #   summarise(media_____ = mean(____, na.rm = ______))
 
@@ -103,6 +105,8 @@ sd(datos$y1, na.rm = TRUE)
 #realicelo con edad
 # ____ (____$____, ______ = _____)
 
+sd(datos$edad, na.rm = TRUE)
+
 
 #III. Usos de summarise y group by para realizar comparaciones específicas####
 
@@ -119,7 +123,7 @@ names(datos)
 unique(datos$region)
 
 datos %>%
-  filter(region == "Región Metropolitana de Santiago") %>%
+  filter(region == "Región Metropolitana de Santiago ") %>%
   group_by(comuna) %>% # distingo por las comunas de la RM
   summarise(media = mean(y1, na.rm = TRUE),
             mediana = median(y1, na.rm = TRUE),
@@ -128,7 +132,7 @@ datos %>%
 
 
 ingresos_por_comuna_media <- datos %>%
-  filter(region == "Región Metropolitana de Santiago") %>%
+  filter(region == "Región Metropolitana de Santiago ") %>%
   group_by(comuna) %>%
   summarise(media = mean(y1, na.rm = TRUE),
             mediana = median(y1, na.rm = TRUE),
@@ -137,7 +141,7 @@ ingresos_por_comuna_media <- datos %>%
 
 
 ingresos_por_comuna_mediana <- datos %>%
-  filter(region == "Región Metropolitana de Santiago") %>%
+  filter(region == "Región Metropolitana de Santiago ") %>%
   group_by(comuna) %>%
   summarise(media = mean(y1, na.rm = TRUE),
             mediana = median(y1, na.rm = TRUE),
@@ -145,7 +149,7 @@ ingresos_por_comuna_mediana <- datos %>%
   arrange(desc(mediana)) # ordenar de mayor a menor por la mediana
 
 ingresos_por_desvio <- datos %>%
-  filter(region == "Región Metropolitana de Santiago") %>%
+  filter(region == "Región Metropolitana de Santiago ") %>%
   group_by(comuna) %>%
   summarise(media = mean(y1, na.rm = TRUE),
             mediana = median(y1, na.rm = TRUE),
@@ -156,7 +160,7 @@ ingresos_por_desvio <- datos %>%
 #mínimo y máximo
 ingresos_por_media_minmax <-  
 datos %>%
-  filter(region == "Región Metropolitana de Santiago") %>%
+  filter(region == "Región Metropolitana de Santiago ") %>%
   group_by(comuna) %>%
   summarise(media = mean(y1, na.rm = TRUE),
             mediana = median(y1, na.rm = TRUE),
@@ -173,11 +177,71 @@ unique(datos$region)
 #disclaimer: 
 #esto es una encuesta, cuya muestra no permite realizar este tipo de inferencias. 
 
+datos %>%
+  filter(region == "Región de Valparaíso") %>%
+  group_by(comuna) %>% # distingo por las comunas de la RM
+  summarise(media = mean(y1, na.rm = TRUE),
+            mediana = median(y1, na.rm = TRUE),
+            desv.est = sd(y1, na.rm = TRUE)) 
+
+
+
+v_ingresos_por_comuna_media <- datos %>%
+  filter(region == "Región de Valparaíso") %>%
+  group_by(comuna) %>%
+  summarise(media = mean(y1, na.rm = TRUE),
+            mediana = median(y1, na.rm = TRUE),
+            desv.est = sd(y1, na.rm = TRUE)) %>%
+  arrange(desc(media)) # ordenar de mayor a menor por la media
+
+
+v_ingresos_por_comuna_mediana <- datos %>%
+  filter(region == "Región de Valparaíso") %>%
+  group_by(comuna) %>%
+  summarise(media = mean(y1, na.rm = TRUE),
+            mediana = median(y1, na.rm = TRUE),
+            desv.est = sd(y1, na.rm = TRUE)) %>%
+  arrange(desc(mediana)) # ordenar de mayor a menor por la mediana
+
+v_ingresos_por_desvio <- datos %>%
+  filter(region == "Región de Valparaíso") %>%
+  group_by(comuna) %>%
+  summarise(media = mean(y1, na.rm = TRUE),
+            mediana = median(y1, na.rm = TRUE),
+            desv.est = sd(y1, na.rm = TRUE)) %>%
+  arrange(desc(desv.est))
+
+
+#mínimo y máximo
+v_ingresos_por_media_minmax <-  
+  datos %>%
+  filter(region == "Región de Valparaíso") %>%
+  group_by(comuna) %>%
+  summarise(media = mean(y1, na.rm = TRUE),
+            mediana = median(y1, na.rm = TRUE),
+            desv.est = sd(y1, na.rm = TRUE),
+            minimo = min(y1, na.rm = TRUE), #agrego mínimo 
+            maximo = max(y1, na.rm = TRUE)) %>% #agrego máximo
+  arrange(desc(media))
+
+v_ingresos_por_mediana_minmax <-  
+  datos %>%
+  filter(region == "Región de Valparaíso") %>%
+  group_by(comuna) %>%
+  summarise(media = mean(y1, na.rm = TRUE),
+            mediana = median(y1, na.rm = TRUE),
+            desv.est = sd(y1, na.rm = TRUE),
+            minimo = min(y1, na.rm = TRUE), #agrego mínimo 
+            maximo = max(y1, na.rm = TRUE)) %>% #agrego máximo
+  arrange(desc(mediana))
+
+
+
 #group_by por sexo
 unique(datos$sexo)
 
 datos %>%
-  filter(region == "Región Metropolitana de Santiago") %>%
+  filter(region == "Región del Biobío") %>%
   group_by(sexo) %>%
   summarise(media = mean(y1, na.rm = TRUE),
             mediana = median(y1, na.rm = TRUE),
@@ -186,11 +250,10 @@ datos %>%
             maximo = max(y1, na.rm = TRUE)) %>% #agrego máximo
   arrange(desc(media))
 
+unique(datos$region)
 
 #práctica: realice el ejercicio anterior pero para Región de Valparaiso #### 
 # unique(datos$______)
-
-
 
 
 #cuartiles, deciles y percentiles####
@@ -273,7 +336,13 @@ ggplot(datos, aes(x= sexo, y = y1, fill=sexo)) + #en x pongo la variable de cort
   guides(fill = "none")+
   theme_minimal()
 
+ggplot(datos, aes(x= region, y = y1, fill=region)) + #en x pongo la variable de corte
+  geom_boxplot(outlier.shape = NA, coef = 1.5, width = 0.6) +
+  scale_y_continuous(limits = c(0, quantile(datos$y1, 0.95, na.rm = TRUE))) + 
+  guides(fill = "none")+
+  theme_minimal() 
 
+ 
 # Box plot customization
 ggplot(datos, aes(x= sexo, y = y1, fill=sexo)) + 
   stat_boxplot(outlier.shape = NA, coef = 1.5, width = 0.6,
@@ -291,21 +360,21 @@ ggplot(datos, aes(x= sexo, y = y1, fill=sexo)) +
 #calcula la mediana, el mínimo, el máximo, el cuartil 1, el 2 y el 3
 
 datos %>%
-  summarise(mediana = _____(____, na.rm = TRUE),
-            desv.est = ____(____, na.rm = TRUE),
-            minimo = ____(____, na.rm = TRUE),
-            maximo = ____(____, na.rm = TRUE),
-            cuartil_1 = quantile(____, probs = _____, na.rm = TRUE),
-            cuartil_2 = quantile(____, probs = _____, na.rm = TRUE),
-            cuartil_3 = quantile(____, probs = _____, na.rm = TRUE))
+  summarise(mediana = median(edad, na.rm = TRUE),
+            desv.est = sd(edad, na.rm = TRUE),
+            minimo = min(edad, na.rm = TRUE),
+            maximo = max(edad, na.rm = TRUE),
+            cuartil_1 = quantile(edad, probs = 0.25, na.rm = TRUE),
+            cuartil_2 = quantile(edad, probs = 0.50, na.rm = TRUE),
+            cuartil_3 = quantile(edad, probs = 0.75, na.rm = TRUE))
 
 
 #Realiza un gráfico de caja y bigote , sin sacar los extremos
-ggplot(datos, aes(y = _____)) +
+ggplot(datos, aes(y = edad)) +
   geom_boxplot()
 
 #Realiza otro para la edad por sexo
-ggplot(datos, aes(y = _____, x=_____)) +
+ggplot(datos, aes(y = edad, x=sexo)) +
   geom_boxplot()
 
 
@@ -348,6 +417,10 @@ ggplot(datos, aes(x = y1)) +
 #práctica####
 #realice histograma con la variable edad, cambie los binwidth
 
+ggplot(datos, aes(x = edad)) +
+  geom_histogram(binwidth = 5, color = "black", fill = "gray") + #binwidth: hacer rangos de 100.000
+  labs(x = "Edad", y = "Frecuencia") +
+  theme_classic()
 
 
 

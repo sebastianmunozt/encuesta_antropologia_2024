@@ -1,26 +1,26 @@
 {
-    "id": "E37F73F0",
-    "path": "C:/Users/noelc/Downloads/clase_9 (2).R",
+    "id": "5CE7E7FF",
+    "path": "C:/Users/noelc/OneDrive/Escritorio/Cuanti II/CLASE 9/clase_9 (1).R",
     "project_path": null,
     "type": "r_source",
-    "hash": "926465368",
+    "hash": "236599530",
     "contents": "",
     "dirty": false,
-    "created": 1716247584070.0,
+    "created": 1716261273247.0,
     "source_on_save": false,
-    "relative_order": 2,
+    "relative_order": 3,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "22,0",
-        "scrollLine": "14"
+        "cursorPosition": "2,0",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1716247583,
+    "lastKnownWriteTime": 1715958576,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1716247583,
+    "last_content_update": 1715958576,
     "read_only": false,
     "read_only_alternatives": []
 }

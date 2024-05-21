@@ -8,6 +8,9 @@ pacman::p_load(tidyverse,# Universo de paquetes : tidyr, dplyr, ggplot2,readr,pu
                writexl,#Guardar tablas formato excel
                DataExplorer) #Exploración rápida
 
+pacman::p_load(tidyverse, openxlsx, readxl,readr,janitor, forcats, writexl, DataExplorer, 
+               datos,  knitr, gt, summarytools, ggthemes, hrbrthemes, foreign, DescTools, ineq)
+
 # 2. Importo archivo y lo asigno a environment ----------------------------
 base_antropologia <- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx")
 libro_codigos<- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx") # dejo una base sin limpiar para observar nombres de preguntas
@@ -132,93 +135,90 @@ print(valores_unicos_descendentes)
 
 #hago un proceso de recodificación: por ejemplo con Alejandra Mondaca, Alonso silva y Amanda Baez (SEGUIR!)
 base_antropologia <- base_antropologia %>%
-  mutate(n_encuestador=case_when(n_encuestador== "alejandra_"~ "Alejandra Mondaca",
+  mutate(n_encuestador=case_when(n_encuestador=="carla_(buffy)" ~ "Alejandra Mondaca",
+                                 n_encuestador=="alexi" ~ "Alejandra Mondaca",
                                  n_encuestador=="alejandra_mondaca" ~ "Alejandra Mondaca",
                                  n_encuestador=="alejandra_mondaca_" ~ "Alejandra Mondaca",
-                                 n_encuestador=="alonso_silva" ~ "Alonso Silva",
+                                 n_encuestador=="alonso_silva" ~ "Alonso Silva", 
                                  n_encuestador=="alonso_silva_" ~ "Alonso Silva",
                                  n_encuestador=="amanda_baez" ~ "Amanda Baez",
                                  n_encuestador=="amanda_baez_" ~ "Amanda Baez",
-                                 TRUE ~n_encuestador))
+                                 n_encuestador=="antonia_ramirez_" ~ "Antonia Ramirez",
+                                 n_encuestador=="camila_crisostomo" ~ "Camila Crisostomo",
+                                 n_encuestador=="camila_segura" ~ "Camila Segura",
+                                 n_encuestador=="catalina_" ~ "Catalina Fuentes",
+                                 n_encuestador=="catalina_fuentes" ~ "Catalina Fuentes",
+                                 n_encuestador=="consuelo_llanten_" ~ "Consuelo Llanten",
+                                 n_encuestador=="consuelo_llanten" ~ "Consuelo Llanten",
+                                 n_encuestador=="alejandra_"~ "Daniela Pasmino",
+                                 n_encuestador=="daniela_berrios" ~ "Daniela Pasmino",
+                                 n_encuestador=="daniela_pasmino" ~ "Daniela Pasmino",
+                                 n_encuestador=="florencia_martin" ~"Florencia Martin",
+                                 n_encuestador=="florencia_martin_" ~ "Florencia Martin",
+                                 n_encuestador=="gabriel_concha" ~ "Gabriel Concha",
+                                 n_encuestador=="gabriel_concha_" ~ "Gabriel Concha",
+                                 n_encuestador=="gonzalo" ~ "Gonzalo Munoz",
+                                 n_encuestador=="gonzalo_" ~ "Gonzalo Munoz",
+                                 n_encuestador=="gonzalo_munoz" ~ "Gonzalo Munoz",
+                                 n_encuestador=="gonzalo_munoz_oliva_" ~ "Gonzalo Munoz",
+                                 n_encuestador=="isidora_aros" ~ "Isidora Aros",
+                                 n_encuestador=="isidora_aros_" ~ "Isidora Aros",
+                                 n_encuestador=="joaquin" ~ "Joaquin Castillo",
+                                 n_encuestador=="joaquin_" ~ "Joaquin Castillo",
+                                 n_encuestador=="joaquin_castillo" ~ "Joaquin Castillo",
+                                 n_encuestador=="yakim_" ~ "Joaquin Castillo",
+                                 n_encuestador=="javiera_herrera" ~ "Javiera Herrera",
+                                 n_encuestador=="joaquin_orellana_" ~ "Joaquin Orellana",
+                                 n_encuestador=="juan" ~ "Joaquin Orellana",
+                                 n_encuestador=="julia_sotomayor"~ "Julia Sotomayor",
+                                 n_encuestador=="elisa_monsalve_"~ "Julia Sotomayor",
+                                 n_encuestador=="escarleth_"~ "Julia Sotomayor",
+                                 n_encuestador=="franco" ~ "Julia Sotomayor",
+                                 n_encuestador== "krishna_asencio" ~ "Krishna Asencio", 
+                                 n_encuestador== "krishna_asencio_" ~ "Krishna Asencio", 
+                                 n_encuestador=="antonia_leiva" ~ "Mariana Perez",
+                                 n_encuestador=="mariana_perez" ~ "Mariana Perez",
+                                 n_encuestador=="mariana_perez_" ~ "Mariana Perez",
+                                 n_encuestador== "pablo_cornejo" ~ "Mariana Perez", 
+                                 n_encuestador== "martin_campusano" ~ "Martin Campusano", 
+                                 n_encuestador== "martin_cifuentes" ~ "Martin Cifuentes", 
+                                 n_encuestador== "matilde_cespedes" ~ "Matilde Cespedes", 
+                                 n_encuestador== "matilde_cespedes_" ~ "Matilde Cespedes", 
+                                 n_encuestador== "antonia_" ~ "Noel Casas-Cordero",
+                                 n_encuestador== "noel_casas-cordero"~ "Noel Casas-Cordero",
+                                 n_encuestador== "oliver_delherbe" ~ "Oliver Delherbe", 
+                                 n_encuestador== "olivier_delherbe" ~ "Oliver Delherbe", 
+                                 n_encuestador== "patricia_gonzalez" ~ "Patricia Gonzalez", 
+                                 n_encuestador== "patricia_gonzalez_" ~ "Patricia Gonzalez", 
+                                 n_encuestador== "pedro_villaroel" ~ "Pedro Villaroel", 
+                                 n_encuestador== "pedro_villarroel" ~ "Pedro Villaroel", 
+                                 n_encuestador== "martina_" ~ "Pedro Villaroel", 
+                                 n_encuestador== "samanta_letelier" ~ "Samanta Letelier", 
+                                 n_encuestador== "samanta_letelier_" ~ "Samanta Letelier", 
+                                 n_encuestador== "sofia_ballerino" ~ "Sofia Ballerino", 
+                                 n_encuestador== "sofia_ballerino_" ~ "Sofia Ballerino",
+                                 n_encuestador== "valentina" ~ "Valentina Gonzalez",
+                                 n_encuestador== "valentina_gonzalez" ~ "Valentina Gonzalez",
+                                 n_encuestador== "valentina_gonzalez_" ~ "Valentina Gonzalez",
+                                 n_encuestador== "valeria_carvajal" ~ "Valeria Carvajal",
+                                 n_encuestador== "valeria_carvajal_donoso" ~ "Valeria Carvajal",
+                                 n_encuestador== "valeria_carvajal_" ~ "Valeria Carvajal",
+                                 n_encuestador== "josefina_ahuile_munoz" ~ "Valeria Carvajal",
+                                 n_encuestador== "farid_halaby" ~ "Valeria Carvajal",
+                                 n_encuestador== "venecia" ~ "Venecia Moreno",
+                                 n_encuestador== "venecia_moreno" ~ "Venecia Moreno",
+                                 n_encuestador== "veronica_moya" ~ "Veronica Moya",
+                                 n_encuestador== "veronica_moya_" ~ "Veronica Moya",
+                                 n_encuestador== "veronica_paz_moya_rosas" ~ "Veronica Moya",
+                                 n_encuestador== "victor" ~ "Victor Avalos",
+                                 n_encuestador== "victor_avalos" ~ "Victor Avalos",
+                                 n_encuestador== "ignacia_fica" ~ "Ricardo Quiroz",
+                                 n_encuestador== "vicente" ~ "Consuelo Llanten",
+                                 n_encuestador== "noel_casas_-cordero_y_samanta_letelier_" ~ "Amanda Baez",
+                                 n_encuestador== "benjamin_(iris)" ~ "Venecia Moreno",
+                                 TRUE ~ n_encuestador))
 table(base_antropologia$n_encuestador)
 
-# ir sacando los nombres desde acá
-                      
-                                 "alexi" ~ "alexi",
-                                 "antonia_" ~ "antonia_", 
-                                 "antonia_leiva"
-                                 "antonia_ramirez_"
-                                 "benjamin_(iris)"
-                                 "camila_crisostomo"
-                                 "camila_segura"
-                                 "carla_(buffy)"
-                                 "catalina_"
-                                 "catalina_fuentes"
-                                 "consuelo_llanten"
-                                 "consuelo_llanten_"
-                                 "daniela_berrios"
-                                 "daniela_pasmino"
-                                 "elisa_monsalve_"
-                                 "escarleth_"
-                                 "farid_halaby"
-                                 "florencia_martin"
-                                 "florencia_martin_"
-                                 "franco"
-                                 "gabriel_concha"
-                                 "gabriel_concha_"
-                                 "gonzalo"
-                                 "gonzalo_"
-                                 "gonzalo_munoz"
-                                 "gonzalo_munoz_oliva_"
-                                 "ignacia_fica"
-                                 "isidora_aros"
-                                 "isidora_aros_"
-                                 "javiera_herrera"
-                                 "joaquin"
-                                 "joaquin_"
-                                 "joaquin_castillo"
-                                 "joaquin_orellana_"
-                                 "josefina_ahuile_munoz"
-                                 "juan"
-                                 "julia_sotomayor"
-                                 "krishna_asencio"
-                                 "krishna_asencio_"
-                                 "mariana_perez"
-                                 "mariana_perez_"
-                                 "martin_campusano"
-                                 "martin_cifuentes"
-                                 "martina_"
-                                 "matilde_cespedes"
-                                 "matilde_cespedes_"
-                                 "noel_casas-cordero"
-                                 "noel_casas_-cordero_y_samanta_letelier_"
-                                 "oliver_delherbe"
-                                 "olivier_delherbe"
-                                 "pablo_cornejo"
-                                 "patricia_gonzalez"
-                                 "patricia_gonzalez_"
-                                 "pedro_villaroel"
-                                 "pedro_villarroel"
-                                 "samanta_letelier"
-                                 "samanta_letelier_"
-                                 "sofia_ballerino"
-                                 "sofia_ballerino_"
-                                 "valentina"
-                                 "valentina_gonzalez"
-                                 "valentina_gonzalez_"
-                                 "valeria_carvajal"
-                                 "valeria_carvajal_"
-                                 "valeria_carvajal_donoso"
-                                 "venecia"
-                                 "venecia_moreno"
-                                 "veronica_moya"
-                                 "veronica_moya_"
-                                 "veronica_paz_moya_rosas"
-                                 "vicente"
-                                 "victor"
-                                 "victor_avalos"
-                                 "yakim_"
-                          
 
 
 # renombro las sociodemográficas: 
@@ -230,6 +230,25 @@ unique(base_antropologia$sd_03)
 
 unique(base_antropologia$sd_01) # 
 unique(base_antropologia$sd_02) # NOEL 
+
+#Rename sd_02
+base_antropologia <- base_antropologia %>% dplyr::rename (identidad_genero =sd_02)
+unique(base_antropologia$identidad_genero)
+
+#df <- df %>%
+# mutate(respuesta_recod = case_when(
+# respuesta %in% c("Categoria A", "Categoria D") ~ "Grupo 1",
+# respuesta %in% c("Categoria B", "Categoria E") ~ "Grupo 2",
+# respuesta %in% c("Categoria C", "Categoria F") ~ "Grupo 3"))
+
+base_antropologia<- base_antropologia %>%
+  mutate(identidad_genero_r= case_when(
+    identidad_genero %in% c("Hombre cisgénero") ~ "Hombre cisgenero",
+    identidad_genero %in% c("Mujer cisgénero") ~ "Mujer cisgenero",
+    identidad_genero %in% c("No binarie",                 
+                            "Agénero", "Género fluido", "Ninguno", "Hombre trans/transmasculino", "Mujer trans/transfemenina") ~ "Persona de genero diverso"))
+
+unique(base_antropologia$identidad_genero_r)
 
 table(base_antropologia$edad) # NOEL
 unique(base_antropologia$edad)
@@ -287,9 +306,91 @@ str(base_antropologia)
 
 
 unique(base_antropologia$sd_04) # JOAQUÍN 
+
+base_antropologia <- base_antropologia %>% dplyr::rename(año_ingreso_carrera = sd_04)
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(año_ingreso_carrera=case_when(año_ingreso_carrera == 2019 ~ "pre-pandemia",
+                                       año_ingreso_carrera == 2020 ~ "Pandemia",
+                                       año_ingreso_carrera == 2021 ~ "Pandemia",
+                                       año_ingreso_carrera == 2022 ~ "post-pandemia",
+                                       año_ingreso_carrera == 2023 ~ "post-pandemia",
+                                       año_ingreso_carrera == 2024 ~ "post-pandemia"
+                                       ))
+
+
+unique(base_antropologia$año_ingreso_carrera)
+
+table(base_antropologia$año_ingreso_carrera)
+
+
+
 unique(base_antropologia$sd_05) # MATÍAS 
+
+
+
 unique(base_antropologia$sd_07) # JOAQUÍN
+
+base_antropologia <- base_antropologia %>%
+  mutate(
+    sd_07 = stringi::stri_trans_general(sd_07, "Latin-ASCII"),
+    sd_07 = tolower(sd_07),  
+    sd_07 = gsub(" ", "_", sd_07),
+    sd_07 = gsub("-+$", "", sd_07),
+  )
+
+base_antropologia <- base_antropologia %>% dplyr::rename(nivel_educacion_padre= sd_07)
+
+base_antropologia <- base_antropologia %>%
+  mutate(nivel_educacion_padre=case_when(nivel_educacion_padre ==  "profesional_(carreras_4_o_mas_anos)" ~ "Educacion Profesional",
+                                         nivel_educacion_padre == "magister_o_maestria" ~ "Educacion Profesional",
+                                         nivel_educacion_padre == "doctorado" ~ "Educacion Profesional",
+                                         nivel_educacion_padre == "tecnico_nivel_superior_(carreras_1_a_3_anos)" ~"Educacion Tecnica",
+                                         nivel_educacion_padre ==  "educacion_media_tecnica_profesional" ~ "Educacion Tecnica",
+                                         nivel_educacion_padre == "educacion_media" ~ "Educacion Media",
+                                         nivel_educacion_padre == "educacion_basica_" ~ "Educacion Basica",
+                                         nivel_educacion_padre == "ensenanza_basica_completa" ~ "Educacion Basica",
+                                         nivel_educacion_padre == "educacion_basica_completa_" ~ "Educacion Basica",
+                                         nivel_educacion_padre == "educacion_basica_hasta_sexto_" ~ "Educacion Basica",
+                                         nivel_educacion_padre == "no_se_"  ~ NA,
+                                         nivel_educacion_padre == "no_se" ~ NA,
+                                         nivel_educacion_padre == "sin_figura_paterna_" ~ NA,
+                                         TRUE ~ nivel_educacion_padre))
+
+unique(base_antropologia$nivel_educacion_padre)
+
+table(base_antropologia$nivel_educacion_padre)
+
+
+
 unique(base_antropologia$sd_08) # JOAQUÍN
+
+base_antropologia <- base_antropologia %>%
+  mutate(
+    sd_08 = stringi::stri_trans_general(sd_08, "Latin-ASCII"),
+    sd_08 = tolower(sd_08),  
+    sd_08 = gsub(" ", "_", sd_08),
+    sd_08 = gsub("-+$", "", sd_08),
+  )
+base_antropologia <- base_antropologia %>% dplyr::rename(nivel_educacion_madre= sd_08)
+
+base_antropologia <- base_antropologia %>%
+  mutate(nivel_educacion_madre=case_when(nivel_educacion_madre ==  "profesional_(carreras_4_o_mas_anos)" ~ "Educacion Profesional",
+                                         nivel_educacion_madre == "magister_o_maestria" ~ "Educacion Profesional",
+                                         nivel_educacion_madre == "doctorado" ~ "Educacion Profesional",
+                                         nivel_educacion_madre == "tecnico_nivel_superior_(carreras_1_a_3_anos)" ~"Educacion Tecnica",
+                                         nivel_educacion_madre ==  "educacion_media_tecnica_profesional" ~ "Educacion Tecnica",
+                                         nivel_educacion_madre == "educacion_media" ~ "Educacion Media",
+                                         nivel_educacion_madre == "profesional_incompleto" ~ "Educacion Media",
+                                         nivel_educacion_madre == "educacion_media_incompleta" ~ "Educacion Básica",
+                                         TRUE ~ nivel_educacion_madre))
+
+unique(base_antropologia$nivel_educacion_madre)
+
+table(base_antropologia$nivel_educacion_madre)
+
+
 unique(base_antropologia$sd_09)
 
 names(base_antropologia)
@@ -335,17 +436,88 @@ base_antropologia <- base_antropologia %>%
 # ea_03_como_describiria_su_carga_academica_actual"
 unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
 
+unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
+
+base_antropologia <- base_antropologia %>% dplyr::rename(descripcion_carga_academica = ea_03)
+names(base_antropologia)
+class(base_antropologia$descripcion_carga_academica)
+
+base_antropologia <- base_antropologia %>% 
+  mutate(descripcion_carga_academica = as.factor(descripcion_carga_academica))
+unique(base_antropologia$descripcion_carga_academica)
+
+
+
 # ea_04_en_el_ultimo_semestre_finalizado_aproximadamente_que_promedio_de_notas_ha_obtenido_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
 unique(base_antropologia$ea_04) # recodificar a número, recodificar a rangos: MATIAS
 
 # ea_05_que_tan_satisfecho_esta_con_tu_rendimiento_academico_en_el_ultimo_semestre_finalizado_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
 unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
 
+unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
+
+base_antropologia <- base_antropologia %>% dplyr::rename(satisfaccion_rendimiento_academico = ea_05)
+names(base_antropologia)
+unique(base_antropologia$satisfaccion_rendimiento_academico)
+table(base_antropologia$satisfaccion_rendimiento_academico)
+class(base_antropologia$satisfaccion_rendimiento_academico)
+base_antropologia <- base_antropologia %>% 
+  mutate(satisfaccion_rendimiento_academico = as.factor(satisfaccion_rendimiento_academico))
+
+base_antropologia <- base_antropologia %>% 
+  mutate(satisfaccion_rendimiento_academico = case_when(satisfaccion_rendimiento_academico== "Insatisfecho" ~ "Insatisfecho",
+                                                        satisfaccion_rendimiento_academico== "Muy insatisfecho" ~ "Insatisfecho",
+                                                        satisfaccion_rendimiento_academico== "Muy Satisfecho" ~ "Satisfecho",
+                                                        satisfaccion_rendimiento_academico== "Satisfecho" ~ "Satisfecho"))
+
+table(base_antropologia$satisfaccion_rendimiento_academico)
+
+
 # ea_06_en_una_escala_del_1_al_5_donde_1_es_minimo_estres_y_5_es_maximo_estres_como_calificaria_su_nivel_de_estres_en_la_universidad_en_el_ultimo_semestre_finalizado",
 unique(base_antropologia$ea_06) # recodificar en 2: Joaquín
 
+base_antropologia <- base_antropologia %>% dplyr::rename(nivel_estres_ultimo_semestre = ea_06)
+
+base_antropologia <- base_antropologia %>%
+  mutate(nivel_estres_ultimo_semestre=case_when(nivel_estres_ultimo_semestre == 1 ~ "Estres Moderado",
+                                                nivel_estres_ultimo_semestre == 2 ~ "Estres Moderado",
+                                                nivel_estres_ultimo_semestre == 3 ~ "Estres Moderado",
+                                                nivel_estres_ultimo_semestre == 4 ~ "Estres Alto",
+                                                nivel_estres_ultimo_semestre == 5 ~ "Estres Alto",
+                                                ))
+
+base_antropologia <- base_antropologia %>%
+  mutate(nivel_estres_ultimo_semestre= factor(nivel_estres_ultimo_semestre, levels = c("Estres Moderado", 
+                                                                                       "Estres Alto" ), ordered = TRUE))
+
+unique(base_antropologia$nivel_estres_ultimo_semestre)
+
+table(base_antropologia$nivel_estres_ultimo_semestre)
+
+
 # ea_07_en_que_medidas_el_estres_afecta_su_rendimiento_academico",
 unique(base_antropologia$ea_07) # recodificar en 2: Joaquín
+
+ase_antropologia <- base_antropologia %>% dplyr::rename(efecto_estres_rendimiento = ea_07)
+
+base_antropologia <- base_antropologia %>%
+  mutate(efecto_estres_rendimiento=case_when(efecto_estres_rendimiento == "Mucho" ~ "Bastante",
+                                             efecto_estres_rendimiento == "Bastante" ~ "Bastante",
+                                             efecto_estres_rendimiento == "Moderado" ~ "Moderamante",
+                                             efecto_estres_rendimiento == "Poco" ~ "Moderamante"
+  ))
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(efecto_estres_rendimiento= factor(efecto_estres_rendimiento, levels = c("Moderamante", 
+                                                                                 "Bastante"
+  ), ordered = TRUE))
+
+unique(base_antropologia$efecto_estres_rendimiento)
+
+table(base_antropologia$efecto_estres_rendimiento)
+
+
 
 # ea_08_puede_identificar_por_si_mismo_cuando_se_siente_estresado_debidos_a_factores_relacionados_con_el_ambito_universitario",
 unique(base_antropologia$ea_08)
@@ -381,6 +553,7 @@ freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>%
 ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
 
+
 ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb() %>%
   kable(col.names = c("Síntoma", "Frecuencia", "%", "% Acumulado"),
@@ -389,11 +562,10 @@ ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = F
   kable_classic(full_width = F, html_font = "Cambria") %>% 
   save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
 
-
-
 # renombro nombre de mi tabla
 ea_09_graf <-  ea_09_graf %>% 
   rename(Problema = value, Porcentaje= pct)
+
 
 # realizo gráfico
 g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
@@ -408,15 +580,79 @@ g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema,
   scale_fill_viridis_d(option = "C", guide = "none") +
   theme_ipsum()
 
-
-
 ggsave("outputs/g_ea_09_graf.png", plot = g_ea_09_graf, width = 10, height = 7, dpi = 300)
 
 # ea_10_que_estrategias_utiliza_con_mayor_frecuencia_para_manejar_el_estres_academico_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
 unique(base_antropologia$ea_10) # NOEL 
 
+#Preguntas de respuesta multiple
+
+unique(base_antropologia$ea_10)
+class(base_antropologia$ea_10)
+
+#tuve que cambiar una categoría porque tenía una "," y al sperar las opciones dentro de la resúesta
+#tambien cortaba un parantesis que tenias comas, así que lo cambie a un "/"
+
+base_antropologia <- base_antropologia %>%
+  mutate(ea_10 = case_when(
+    grepl("Participar en otras actividades creativas \\(música, arte, escritura\\)", ea_10) ~
+      gsub("Participar en otras actividades creativas \\(música, arte, escritura\\)", 
+           "Participar en otras actividades creativas (música/arte/escritura)", 
+           ea_10),
+    TRUE ~ ea_10
+  ))
+
+#separo las respuestas y creo un vector que las lista
+respuestas_ea_10 <- unlist(strsplit(base_antropologia$ea_10, ", ")) # separo las respuestas que tienen coma (,)
+
+#hice la lista altiro
+unique(respuestas_ea_10)
 
 
+#observo las respuestas
+freq(respuestas_ea_10, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#elimino espacio antes de primera letra
+respuestas_ea_10_limpio <- trimws(respuestas_ea_10, which = "left")
+
+# obtengo las frecuencias de mis preguntas de respuesta múltiple
+freq(respuestas_ea_10_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#Guardo para graficar
+ea_10_graf <- freq(respuestas_ea_10_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+ea_10_tabla <- freq(respuestas_ea_10_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Estrategias", "Frecuencia", "%", "% Acumulado"),
+        caption = "Estrategias del manejo del estres", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/ea_10_tabla.png", zoom = 3)
+
+install.packages("kableExtra")
+library(kableExtra)
+
+ea_10_graf <-  ea_10_graf %>% 
+  rename(Problema = value, Porcentaje= pct)
+
+
+
+g_ea_10_graf <- ggplot(ea_10_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
+  geom_col() +
+  labs(title = "Estrategias del manejo del estres",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",
+       y = "Estrategia") +
+  geom_text(data = ea_10_graf %>% filter(rank(-Porcentaje) <= 12), # Solo añadir texto a las primeras 8 categorías
+            aes(label = ifelse(rank(-Porcentaje) <= 12, paste0(round(Porcentaje, 1), "%"), "")),
+            hjust = 1, size = 3, nudge_x = -.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+ggsave("outputs/g_ea_10_graf.png", plot = g_ea_10_graf, width = 10, height = 7, dpi = 300)
 
 # Exportar ----------------------------------------------------------------
 
