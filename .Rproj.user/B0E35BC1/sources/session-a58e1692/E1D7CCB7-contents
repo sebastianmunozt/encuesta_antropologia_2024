@@ -21,17 +21,18 @@ names(base_antropologia) #observo que hay puntos, mayúsculas y minúsculas, etc
 
 
 # 3. Data Wrangling -------------------------------------------------------
-#3.1. limpieza inicial
+
+#3.1. Limpieza inicial ####
 base_antropologia <- janitor::clean_names(base_antropologia) #con esto transformo todo a minúscula, quito tildes, saco signos, borro espacios
 names(base_antropologia) # queda mucho mejor
 
-#3.2. observación de base
+#3.2. Observación de general de base ####
 nrow(base_antropologia) #147 cantidad de casos
 ncol(base_antropologia) #50 cantidad de variables
 sapply(base_antropologia, FUN = class) # sapply: realiza un a función a varias variables 
 str(base_antropologia) #estructura del objeto base de datos
 
-#3.3.Renombrar variables 
+#3.2.Cambio nombre de variables ####
 #extraigo el nombre de todas las variables
 names (base_antropologia)
 
@@ -100,8 +101,6 @@ primeras_5_letras <- substr(nombres_de_variables, 1, 5)
 base_antropologia <- base_antropologia %>%
   rename_at(vars(nombres_de_variables), ~ primeras_5_letras) #recodificación múltiples con un vector
 
-names(base_antropologia)
-
 #renombro algunas variables en específico
 names(base_antropologia)
 
@@ -112,11 +111,12 @@ base_antropologia <- base_antropologia %>% dplyr::rename (n_encuestador = cual_)
 names(base_antropologia)
 
 
-# Trabajo con variables sociodemográficas
-# Limpieza de variable: n_encuestador: realizada por SAMANTA.
+#3.3.Variables de identificación y sociodemográficas ####
+# 3.3.1. Variable Nombre Encuestador ####
+# realizada por SAMANTA.
+
 # Por ser una pregunta abierta hago una limpieza de categorías
 # Elimino caracteres latinos, las pongo todas en minúsculas, reemplazo espacios por guión bajo.
-
 base_antropologia <- base_antropologia %>%
   mutate(
     n_encuestador = stringi::stri_trans_general(n_encuestador, "Latin-ASCII"),  # Convierte caracteres latinos en la columna `n_encuestador` a su equivalente ASCII
@@ -126,14 +126,14 @@ base_antropologia <- base_antropologia %>%
 
 unique(base_antropologia$n_encuestador) #observo mucha variedad de como se escriben los nombres. 
 
-# voy a recodificar los nombres, para ello hago lo siguiente
-# hago un listado de los nombres 
+# voy a recodificar los nombres, para ello hago lo siguiente:
+# a) hago un listado de los nombres 
 valores_unicos_a<- sort(unique(base_antropologia$n_encuestador), decreasing = F)
 
 #imprimo los valores ordenados, para verlos, copiarlos y recodificarlos. 
-print(valores_unicos_descendentes)
+print(valores_unicos_a)
 
-#hago un proceso de recodificación: por ejemplo con Alejandra Mondaca, Alonso silva y Amanda Baez (SEGUIR!)
+#b) hago un proceso de recodificación: por ejemplo con Alejandra Mondaca, Alonso silva y Amanda Baez (SEGUIR!)
 base_antropologia <- base_antropologia %>%
   mutate(n_encuestador=case_when(n_encuestador=="carla_(buffy)" ~ "Alejandra Mondaca",
                                  n_encuestador=="alexi" ~ "Alejandra Mondaca",
@@ -220,27 +220,16 @@ base_antropologia <- base_antropologia %>%
 table(base_antropologia$n_encuestador)
 
 
+# 3.3.2. Variable Identidad de Género ####
+# Realizada por Noel
 
-# renombro las sociodemográficas: 
-names(base_antropologia)
-base_antropologia <- base_antropologia %>% dplyr::rename()
-unique(base_antropologia$sd_03)
-
-
-
-unique(base_antropologia$sd_01) # 
 unique(base_antropologia$sd_02) # NOEL 
 
 #Rename sd_02
 base_antropologia <- base_antropologia %>% dplyr::rename (identidad_genero =sd_02)
 unique(base_antropologia$identidad_genero)
 
-#df <- df %>%
-# mutate(respuesta_recod = case_when(
-# respuesta %in% c("Categoria A", "Categoria D") ~ "Grupo 1",
-# respuesta %in% c("Categoria B", "Categoria E") ~ "Grupo 2",
-# respuesta %in% c("Categoria C", "Categoria F") ~ "Grupo 3"))
-
+#Recodifico en 3 grupos
 base_antropologia<- base_antropologia %>%
   mutate(identidad_genero_r= case_when(
     identidad_genero %in% c("Hombre cisgénero") ~ "Hombre cisgenero",
@@ -248,10 +237,12 @@ base_antropologia<- base_antropologia %>%
     identidad_genero %in% c("No binarie",                 
                             "Agénero", "Género fluido", "Ninguno", "Hombre trans/transmasculino", "Mujer trans/transfemenina") ~ "Persona de genero diverso"))
 
+#Observo lo realizado
 unique(base_antropologia$identidad_genero_r)
+table(base_antropologia$identidad_genero_r)
 
-table(base_antropologia$edad) # NOEL
-unique(base_antropologia$edad)
+# 3.3.3. Variable Edad####
+# Realizada por Noel
 
 #Rename sd_03
 #primero la cambio el nombre a la variable
@@ -259,12 +250,7 @@ base_antropologia <- base_antropologia %>% dplyr::rename (edad =sd_03)
 names(base_antropologia)
 unique(base_antropologia$edad)
 
-base <- base %>% mutate(variable_elegida=case_when(variable_elegida=="valor respuesta dada"~"Nuevo valor de la categoría",
-                                                   variable_elegida=="valor respuesta dada"~"Nuevo valor de la categoría",
-                                                   variable_elegida=="valor respuesta dada"~"Nuevo valor de la categoría",
-                                                   TRUE ~ ocupacion_madre))
-
-
+#Proceso de recodificación
 base_antropologia <- base_antropologia %>% mutate(edad=case_when(edad=="23.0"~"23",
                                             edad=="20.0"~"20",  
                                             edad=="22.0"~"22",
@@ -291,8 +277,6 @@ base_antropologia <- base_antropologia %>% mutate(edad=case_when(edad=="23.0"~"2
 unique(base_antropologia$edad)
 
 #ahora construyo una nueva variable con rangos
-
-
 base_antropologia$edad <- as.numeric(base_antropologia$edad)
 class(base_antropologia$edad)
 
@@ -301,17 +285,22 @@ base_antropologia <- base_antropologia %>%
                             edad %in% c(21:23) ~ "21 a 23", 
                             edad %in% c(24:29) ~ "24 a 29", 
                             edad >= 30 ~ "30 o más"))
+#Observo lo realizado
+unique(base_antropologia$edad_r)
+table(base_antropologia$edad_r)
 
-str(base_antropologia)
 
+# 3.3.4. Variable Ingreso a Carrera####
+# Realizada por Joaquín
+#Observo
+unique(base_antropologia$sd_04) 
 
-unique(base_antropologia$sd_04) # JOAQUÍN 
-
+#Renombro
 base_antropologia <- base_antropologia %>% dplyr::rename(año_ingreso_carrera = sd_04)
 
-
+#Recodifico
 base_antropologia <- base_antropologia %>%
-  mutate(año_ingreso_carrera=case_when(año_ingreso_carrera == 2019 ~ "pre-pandemia",
+  mutate(año_ingreso_carrera_r=case_when(año_ingreso_carrera == 2019 ~ "pre-pandemia",
                                        año_ingreso_carrera == 2020 ~ "Pandemia",
                                        año_ingreso_carrera == 2021 ~ "Pandemia",
                                        año_ingreso_carrera == 2022 ~ "post-pandemia",
@@ -319,19 +308,45 @@ base_antropologia <- base_antropologia %>%
                                        año_ingreso_carrera == 2024 ~ "post-pandemia"
                                        ))
 
-
-unique(base_antropologia$año_ingreso_carrera)
-
-table(base_antropologia$año_ingreso_carrera)
-
+#Observo lo realizado
+unique(base_antropologia$año_ingreso_carrera_r)
+table(base_antropologia$año_ingreso_carrera_r)
 
 
-unique(base_antropologia$sd_05) # MATÍAS 
+# 3.3.5. Variable Comuna de Residencia - FALTA ####
+# Realizada por Matías
+unique(base_antropologia$sd_05) 
+
+# Considerar posibles recodificaciones: 
+# a) distancia a la universidad
+# b) indice de prioridad social
+# c) zona de la ciudad 
 
 
+# 3.3.6. Variable Clase Social####
+# Realizada por Sebastián 
+unique(base_antropologia$sd_06) 
 
-unique(base_antropologia$sd_07) # JOAQUÍN
+#renombro
+base_antropologia <- base_antropologia %>% dplyr::rename(clase_social = sd_06)
+unique(base_antropologia$clase_social) 
+table(base_antropologia$clase_social)
 
+#Ordeno las categorías porque son ordinales
+class(base_antropologia$clase_social) # están en "character"
+
+base_antropologia$clase_social <- base_antropologia$clase_social %>% fct_relevel(c("Clase social baja", "Clase social media - baja", "Clase social media", "Clase social media - alta")) 
+class(base_antropologia$clase_social) # ahora están ordenadas y en "factor"
+
+#Observo lo realizado
+table(base_antropologia$clase_social)
+
+# 3.3.7. Variable Educación Figura Paterna####
+# Realizada por: Joaquín
+# Observo Categorías
+unique(base_antropologia$sd_07) 
+
+# Quito valores en español, cambio espacios por guión y elimino -
 base_antropologia <- base_antropologia %>%
   mutate(
     sd_07 = stringi::stri_trans_general(sd_07, "Latin-ASCII"),
@@ -340,32 +355,45 @@ base_antropologia <- base_antropologia %>%
     sd_07 = gsub("-+$", "", sd_07),
   )
 
+# renombro
 base_antropologia <- base_antropologia %>% dplyr::rename(nivel_educacion_padre= sd_07)
 
+
 base_antropologia <- base_antropologia %>%
-  mutate(nivel_educacion_padre=case_when(nivel_educacion_padre ==  "profesional_(carreras_4_o_mas_anos)" ~ "Educacion Profesional",
-                                         nivel_educacion_padre == "magister_o_maestria" ~ "Educacion Profesional",
-                                         nivel_educacion_padre == "doctorado" ~ "Educacion Profesional",
-                                         nivel_educacion_padre == "tecnico_nivel_superior_(carreras_1_a_3_anos)" ~"Educacion Tecnica",
-                                         nivel_educacion_padre ==  "educacion_media_tecnica_profesional" ~ "Educacion Tecnica",
-                                         nivel_educacion_padre == "educacion_media" ~ "Educacion Media",
-                                         nivel_educacion_padre == "educacion_basica_" ~ "Educacion Basica",
-                                         nivel_educacion_padre == "ensenanza_basica_completa" ~ "Educacion Basica",
-                                         nivel_educacion_padre == "educacion_basica_completa_" ~ "Educacion Basica",
-                                         nivel_educacion_padre == "educacion_basica_hasta_sexto_" ~ "Educacion Basica",
+  mutate(nivel_educacion_padre=case_when(nivel_educacion_padre ==  "profesional_(carreras_4_o_mas_anos)" ~ "Educación Profesional",
+                                         nivel_educacion_padre == "magister_o_maestria" ~ "Educación Profesional",
+                                         nivel_educacion_padre == "doctorado" ~ "Educación Profesional",
+                                         nivel_educacion_padre == "tecnico_nivel_superior_(carreras_1_a_3_anos)" ~"Educación Técnica",
+                                         nivel_educacion_padre ==  "educacion_media_tecnica_profesional" ~ "Educación Técnica",
+                                         nivel_educacion_padre == "educacion_media" ~ "Educación Media",
+                                         nivel_educacion_padre == "educacion_basica_" ~ "Educación Básica",
+                                         nivel_educacion_padre == "ensenanza_basica_completa" ~ "Educación Básica",
+                                         nivel_educacion_padre == "educacion_basica_completa_" ~ "Educación Básica",
+                                         nivel_educacion_padre == "educacion_basica_hasta_sexto_" ~ "Educación Básica",
                                          nivel_educacion_padre == "no_se_"  ~ NA,
                                          nivel_educacion_padre == "no_se" ~ NA,
                                          nivel_educacion_padre == "sin_figura_paterna_" ~ NA,
                                          TRUE ~ nivel_educacion_padre))
 
+#Observo lo realizado
 unique(base_antropologia$nivel_educacion_padre)
-
 table(base_antropologia$nivel_educacion_padre)
 
+#Ordeno las categorías porque son ordinales
+class(base_antropologia$nivel_educacion_padre) # están en "character"
 
+base_antropologia$nivel_educacion_padre <- base_antropologia$nivel_educacion_padre %>% fct_relevel(c("Educación Básica", "Educación Media", "Educación Técnica", "Educación Profesional")) 
+class(base_antropologia$nivel_educacion_padre) # ahora están ordenadas y en "factor"
 
-unique(base_antropologia$sd_08) # JOAQUÍN
+#Observo lo realizado
+table(base_antropologia$nivel_educacion_padre)
 
+# 3.3.8. Variable Educación Figura Materna####
+# Realizado por: Joaquín
+# Observo:
+unique(base_antropologia$sd_08) 
+
+# Quito valores en español, cambio espacios por guión y elimino -
 base_antropologia <- base_antropologia %>%
   mutate(
     sd_08 = stringi::stri_trans_general(sd_08, "Latin-ASCII"),
@@ -373,17 +401,20 @@ base_antropologia <- base_antropologia %>%
     sd_08 = gsub(" ", "_", sd_08),
     sd_08 = gsub("-+$", "", sd_08),
   )
+
+# renombro
 base_antropologia <- base_antropologia %>% dplyr::rename(nivel_educacion_madre= sd_08)
 
+# recodifico
 base_antropologia <- base_antropologia %>%
-  mutate(nivel_educacion_madre=case_when(nivel_educacion_madre ==  "profesional_(carreras_4_o_mas_anos)" ~ "Educacion Profesional",
-                                         nivel_educacion_madre == "magister_o_maestria" ~ "Educacion Profesional",
-                                         nivel_educacion_madre == "doctorado" ~ "Educacion Profesional",
-                                         nivel_educacion_madre == "tecnico_nivel_superior_(carreras_1_a_3_anos)" ~"Educacion Tecnica",
-                                         nivel_educacion_madre ==  "educacion_media_tecnica_profesional" ~ "Educacion Tecnica",
-                                         nivel_educacion_madre == "educacion_media" ~ "Educacion Media",
-                                         nivel_educacion_madre == "profesional_incompleto" ~ "Educacion Media",
-                                         nivel_educacion_madre == "educacion_media_incompleta" ~ "Educacion Básica",
+  mutate(nivel_educacion_madre=case_when(nivel_educacion_madre ==  "profesional_(carreras_4_o_mas_anos)" ~ "Educación Profesional",
+                                         nivel_educacion_madre == "magister_o_maestria" ~ "Educación Profesional",
+                                         nivel_educacion_madre == "doctorado" ~ "Educación Profesional",
+                                         nivel_educacion_madre == "tecnico_nivel_superior_(carreras_1_a_3_anos)" ~"Educación Técnica",
+                                         nivel_educacion_madre ==  "educacion_media_tecnica_profesional" ~ "Educación Técnica",
+                                         nivel_educacion_madre == "educacion_media" ~ "Educación Media",
+                                         nivel_educacion_madre == "profesional_incompleto" ~ "Educación Media",
+                                         nivel_educacion_madre == "educacion_media_incompleta" ~ "Educación Básica",
                                          TRUE ~ nivel_educacion_madre))
 
 unique(base_antropologia$nivel_educacion_madre)
@@ -391,146 +422,240 @@ unique(base_antropologia$nivel_educacion_madre)
 table(base_antropologia$nivel_educacion_madre)
 
 
+#Ordeno las categorías porque son ordinales
+class(base_antropologia$nivel_educacion_madre) # están en "character"
+
+base_antropologia$nivel_educacion_madre <- base_antropologia$nivel_educacion_madre %>% fct_relevel(c("Educación Básica", "Educación Media", "Educación Técnica", "Educación Profesional")) 
+class(base_antropologia$nivel_educacion_madre) # ahora están ordenadas y en "factor"
+
+#Observo lo realizado
+table(base_antropologia$nivel_educacion_madre)
+
+
+# 3.3.9. Variable último Colegio####
 unique(base_antropologia$sd_09)
 
-names(base_antropologia)
+#renombro
+base_antropologia <- base_antropologia %>% dplyr::rename(ultimo_colegio = sd_09)
+unique(base_antropologia$ultimo_colegio) 
+table(base_antropologia$ultimo_colegio)
 
-# distancia a la universidad
-# indice de prioridad social
-# zona de la ciudad 
+#Ordeno las categorías porque son ordinales
+class(base_antropologia$ultimo_colegio) # están en "character"
 
-# Estrés académico
-unique(base_antropologia$ea_01)
-unique(base_antropologia$ea_02)
+base_antropologia$ultimo_colegio <- base_antropologia$ultimo_colegio %>% fct_relevel(c("Público", "Particular subvencionado", "Particular")) 
+class(base_antropologia$ultimo_colegio) # ahora están ordenadas y en "factor"
+
+#Observo lo realizado
+table(base_antropologia$ultimo_colegio)
 
 
-# ea_01_cuantas_horas_dedica_aproximadamente_al_estudio_y_a_la_realizacion_de_trabajos_universitarios_fuera_del_aula_por_cada_dia_una_semana_habil_esto_es_de_lunes_a_viernes_por_ejemplo_si_lunes_y_martes_suelo_estudiar_mas_o_menos_3_horas_miercoles_5_horas_y_finalmente_jueves_y_viernes_suelo_estudiar_2_horas_el_total_de_horas_es_15_dividido_por_15_por_5_me_da_3_deberia_marcar_la_alternativa_b_3_o_4_horas",
+#3.4.Variables de Estrés académico####
+
+#3.4.1. Horas de estudio semana ####
+# realizado por: Noel 
+
 class(base_antropologia$ea_01) # transformar en factor y ordenar: NOEL 
 
 #primero la cambio el nombre a la variable
-base_antropologia <- base_antropologia %>% dplyr::rename (horas_estudio_semana = "ea_01"  )
-names(base_antropologia)
-unique(base_antropologia$horas_estudio_semana)
-table(base_antropologia$horas_estudio_semana)
+base_antropologia <- base_antropologia %>% dplyr::rename (ea_01_horas_estudio_semana = "ea_01"  )
+
+unique(base_antropologia$ea_01_horas_estudio_semana)
+table(base_antropologia$ea_01_horas_estudio_semana)
 
 #cambio a factor
-class(base_antropologia$horas_estudio_semana)
+class(base_antropologia$ea_01_horas_estudio_semana)
 
 base_antropologia <- base_antropologia %>%
-  mutate(horas_estudio_semana = as.factor(horas_estudio_semana))
+  mutate(horas_estudio_semana = as.factor(ea_01_horas_estudio_semana))
 
 
-# ea_02_cuantas_horas_dedica_aproximadamente_al_estudio_cada_dia_a_lo_largo_del_fin_de_semana_sabado_y_domingo",
-unique(base_antropologia$ea_02) # transformar en factor y ordenar: NOEL 
+#3.4.2. Horas de estudio fin de semana ####
+# realizado por: Noel 
+
+unique(base_antropologia$ea_02) 
 
 #primero la cambio el nombre a la variable
-base_antropologia <- base_antropologia %>% dplyr::rename (horas_estudio_fin_semana = "ea_02"  )
+base_antropologia <- base_antropologia %>% dplyr::rename (ea_02_horas_estudio_fin_semana = "ea_02")
 names(base_antropologia)
 
 #cambio a factor
-class(base_antropologia$horas_estudio_fin_semana)
+class(base_antropologia$ea_02_horas_estudio_fin_semana)
 
 base_antropologia <- base_antropologia %>%
-  mutate(horas_estudio_fin_semana = as.factor(horas_estudio_fin_semana))
+  mutate(ea_02_horas_estudio_fin_semana = as.factor(ea_02_horas_estudio_fin_semana))
 
-# ea_03_como_describiria_su_carga_academica_actual"
-unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
+#Observo tabla
+table(base_antropologia $ea_02_horas_estudio_fin_semana)
 
-unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
 
-base_antropologia <- base_antropologia %>% dplyr::rename(descripcion_carga_academica = ea_03)
+#3.4.3. Carga académica actual  ####
+# realizado por: Samanta
+unique(base_antropologia$ea_03) 
+
+# renombro
+base_antropologia <- base_antropologia %>% dplyr::rename(ea_03_descripcion_carga_academica = ea_03)
 names(base_antropologia)
-class(base_antropologia$descripcion_carga_academica)
+class(base_antropologia$ea_03_descripcion_carga_academica)
 
-base_antropologia <- base_antropologia %>% 
-  mutate(descripcion_carga_academica = as.factor(descripcion_carga_academica))
-unique(base_antropologia$descripcion_carga_academica)
+# Ordeno (fct_relevel) ####
+base_antropologia$ea_03_descripcion_carga_academica <- base_antropologia$ea_03_descripcion_carga_academica %>% fct_relevel(c("Ligera", "Moderada", "Pesada", "Muy pesada")) 
+class(base_antropologia$ea_03_descripcion_carga_academica) # ahora están ordenadas y en "factor"
 
+table(base_antropologia$ea_03_descripcion_carga_academica)
 
+#3.4.4. Notas Último Semestre - FALTA  ####
+# realizado por: Matías
 
-# ea_04_en_el_ultimo_semestre_finalizado_aproximadamente_que_promedio_de_notas_ha_obtenido_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
 unique(base_antropologia$ea_04) # recodificar a número, recodificar a rangos: MATIAS
 
-# ea_05_que_tan_satisfecho_esta_con_tu_rendimiento_academico_en_el_ultimo_semestre_finalizado_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
-unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
+#3.4.5. Satisfacción rendimiento  ####
+# realizado por: Samanta
+unique(base_antropologia$ea_05) 
 
-unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
-
-base_antropologia <- base_antropologia %>% dplyr::rename(satisfaccion_rendimiento_academico = ea_05)
+# renombro
+base_antropologia <- base_antropologia %>% dplyr::rename(ea_05_satisfaccion_rendimiento_academico = ea_05)
 names(base_antropologia)
-unique(base_antropologia$satisfaccion_rendimiento_academico)
-table(base_antropologia$satisfaccion_rendimiento_academico)
-class(base_antropologia$satisfaccion_rendimiento_academico)
+
+# Observo categorías
+table(base_antropologia$ea_05_satisfaccion_rendimiento_academico)
+class(base_antropologia$ea_05_satisfaccion_rendimiento_academico)
+
+# Ordeno categorías y transformo a factor
+base_antropologia$ea_05_satisfaccion_rendimiento_academico <- base_antropologia$ea_05_satisfaccion_rendimiento_academico %>% fct_relevel(c("Muy insatisfecho", "Insatisfecho", "Satisfecho", "Muy satisfecho")) 
+class(base_antropologia$ea_05_satisfaccion_rendimiento_academico)
+
+# Recodifico 
 base_antropologia <- base_antropologia %>% 
-  mutate(satisfaccion_rendimiento_academico = as.factor(satisfaccion_rendimiento_academico))
-
-base_antropologia <- base_antropologia %>% 
-  mutate(satisfaccion_rendimiento_academico = case_when(satisfaccion_rendimiento_academico== "Insatisfecho" ~ "Insatisfecho",
-                                                        satisfaccion_rendimiento_academico== "Muy insatisfecho" ~ "Insatisfecho",
-                                                        satisfaccion_rendimiento_academico== "Muy Satisfecho" ~ "Satisfecho",
-                                                        satisfaccion_rendimiento_academico== "Satisfecho" ~ "Satisfecho"))
-
-table(base_antropologia$satisfaccion_rendimiento_academico)
+  mutate(ea_05_satisfaccion_rendimiento_academico_r = case_when(ea_05_satisfaccion_rendimiento_academico== "Insatisfecho" ~ "Insatisfecho",
+                                                        ea_05_satisfaccion_rendimiento_academico== "Muy insatisfecho" ~ "Insatisfecho",
+                                                        ea_05_satisfaccion_rendimiento_academico== "Muy Satisfecho" ~ "Satisfecho",
+                                                        ea_05_satisfaccion_rendimiento_academico== "Satisfecho" ~ "Satisfecho"))
+# Observo lo realizado
+table(base_antropologia$ea_05_satisfaccion_rendimiento_academico_r)
 
 
-# ea_06_en_una_escala_del_1_al_5_donde_1_es_minimo_estres_y_5_es_maximo_estres_como_calificaria_su_nivel_de_estres_en_la_universidad_en_el_ultimo_semestre_finalizado",
-unique(base_antropologia$ea_06) # recodificar en 2: Joaquín
+#3.4.6. Nivel de Estrés  ####
+# realizado por: Joaquín
+unique(base_antropologia$ea_06) 
 
-base_antropologia <- base_antropologia %>% dplyr::rename(nivel_estres_ultimo_semestre = ea_06)
+base_antropologia <- base_antropologia %>% dplyr::rename(ea_06_nivel_estres_ultimo_semestre = ea_06)
+table(base_antropologia$ea_06_nivel_estres_ultimo_semestre)
+class(base_antropologia$ea_06_nivel_estres_ultimo_semestre)
 
+# recodifico
 base_antropologia <- base_antropologia %>%
-  mutate(nivel_estres_ultimo_semestre=case_when(nivel_estres_ultimo_semestre == 1 ~ "Estres Moderado",
-                                                nivel_estres_ultimo_semestre == 2 ~ "Estres Moderado",
-                                                nivel_estres_ultimo_semestre == 3 ~ "Estres Moderado",
-                                                nivel_estres_ultimo_semestre == 4 ~ "Estres Alto",
-                                                nivel_estres_ultimo_semestre == 5 ~ "Estres Alto",
+  mutate(ea_06_nivel_estres_ultimo_semestre_r=case_when(ea_06_nivel_estres_ultimo_semestre == 1 ~ "Estres Bajo",
+                                                ea_06_nivel_estres_ultimo_semestre == 2 ~ "Estres Bajo",
+                                                ea_06_nivel_estres_ultimo_semestre == 3 ~ "Estres Moderado",
+                                                ea_06_nivel_estres_ultimo_semestre == 4 ~ "Estres Alto",
+                                                ea_06_nivel_estres_ultimo_semestre == 5 ~ "Estres Alto",
                                                 ))
-
+# ordeno variable recodificada
 base_antropologia <- base_antropologia %>%
-  mutate(nivel_estres_ultimo_semestre= factor(nivel_estres_ultimo_semestre, levels = c("Estres Moderado", 
+  mutate(ea_06_nivel_estres_ultimo_semestre_r= factor(ea_06_nivel_estres_ultimo_semestre_r, levels = c("Estres Bajo","Estres Moderado", 
                                                                                        "Estres Alto" ), ordered = TRUE))
 
-unique(base_antropologia$nivel_estres_ultimo_semestre)
+# observo recodificación
+table(base_antropologia$ea_06_nivel_estres_ultimo_semestre_r)
 
-table(base_antropologia$nivel_estres_ultimo_semestre)
 
+#3.4.7. Estrés ante rendimiento  ####
+# realizado por: Joaquín
+unique(base_antropologia$ea_07) 
 
-# ea_07_en_que_medidas_el_estres_afecta_su_rendimiento_academico",
-unique(base_antropologia$ea_07) # recodificar en 2: Joaquín
+base_antropologia <- base_antropologia %>% dplyr::rename(ea_07_efecto_estres_rendimiento = ea_07)
 
-ase_antropologia <- base_antropologia %>% dplyr::rename(efecto_estres_rendimiento = ea_07)
+table(base_antropologia$ea_07_efecto_estres_rendimiento)
 
+#ordeno
 base_antropologia <- base_antropologia %>%
-  mutate(efecto_estres_rendimiento=case_when(efecto_estres_rendimiento == "Mucho" ~ "Bastante",
-                                             efecto_estres_rendimiento == "Bastante" ~ "Bastante",
-                                             efecto_estres_rendimiento == "Moderado" ~ "Moderamante",
-                                             efecto_estres_rendimiento == "Poco" ~ "Moderamante"
+  mutate(ea_07_efecto_estres_rendimiento =factor(ea_07_efecto_estres_rendimiento, levels = c("Poco","Moderado", 
+                                                                                             "Bastante","Mucho"), ordered = TRUE))
+table(base_antropologia$ea_07_efecto_estres_rendimiento)
+
+
+#recodifico en dos
+base_antropologia <- base_antropologia %>%
+  mutate(ea_07_efecto_estres_rendimiento_r=case_when(ea_07_efecto_estres_rendimiento == "Mucho" ~ "Bastante",
+                                             ea_07_efecto_estres_rendimiento == "Bastante" ~ "Bastante",
+                                             ea_07_efecto_estres_rendimiento == "Moderado" ~ "Moderadamente",
+                                             ea_07_efecto_estres_rendimiento == "Poco" ~ "Moderadamente"
   ))
 
-
 base_antropologia <- base_antropologia %>%
-  mutate(efecto_estres_rendimiento= factor(efecto_estres_rendimiento, levels = c("Moderamante", 
+  mutate(ea_07_efecto_estres_rendimiento_r= factor(ea_07_efecto_estres_rendimiento_r, levels = c("Moderadamente", 
                                                                                  "Bastante"
   ), ordered = TRUE))
 
-unique(base_antropologia$efecto_estres_rendimiento)
 
-table(base_antropologia$efecto_estres_rendimiento)
-
+#observo
+table(base_antropologia$ea_07_efecto_estres_rendimiento_r)
 
 
 # ea_08_puede_identificar_por_si_mismo_cuando_se_siente_estresado_debidos_a_factores_relacionados_con_el_ambito_universitario",
 unique(base_antropologia$ea_08)
 
+
+# ea_09: respuesta múltiple procesamiento abajo
+# ea_10: respuesta múltiple procesamiento abajo
+
+
+
+
+
+# Exportar ----------------------------------------------------------------
+
+write.xlsx(x = base_antropologia,file = "base_antropologia_limpia")
+
+
+# Análisis Univariados -------------------------------
+
+# Sociodemográficas y de identificación -----------------------------------
+
+# 01. n_encuestador
+# Distribución de Frecuencias
+n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+#install.packages("kableExtra")
+library(kableExtra)
+
+n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Encuestador/a", "Frecuencia", "%", "% Acumulado"),
+        caption = "Encuestas por Encuestador/a", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/n_encuestador.png", zoom = 3)
+
+# renombro nombre de mi tabla
+n_encuestador_t <-  n_encuestador_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Encuestas por Encuestador/a",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Nombre del Encuestador/a") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+
+
+
+
+# Estrés Académico --------------------------------------------------------
+
+
 # ea_09_cuando_esta_en_periodos_de_evaluaciones_academicas_ha_tenido_alguno_de_estos_sintomas_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
 unique(base_antropologia$ea_09) # SEBASTIÁN
 class(base_antropologia$ea_09)
-
-# RESPUESTA MÚLTIPLE 
-# ea_09_cuando_esta_en_periodos_de_evaluaciones_academicas_ha_tenido_alguno_de_estos_sintomas_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
-unique(base_antropologia$ea_09) # SEBASTIÁN
-class(base_antropologia$ea_09)
-
 
 #separo las respuestas y creo un vector que las lista
 respuestas <- strsplit(base_antropologia$ea_09, ",") # separo las respuestas que tienen coma (,)
@@ -653,7 +778,3 @@ g_ea_10_graf <- ggplot(ea_10_graf, aes(x = Porcentaje, y = fct_reorder(Problema,
   theme_ipsum()
 
 ggsave("outputs/g_ea_10_graf.png", plot = g_ea_10_graf, width = 10, height = 7, dpi = 300)
-
-# Exportar ----------------------------------------------------------------
-
-write.xlsx(x = base_antropologia,file = "base_antropologia_limpia")
