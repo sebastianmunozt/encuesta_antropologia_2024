@@ -571,8 +571,79 @@ table(base_antropologia$ea_03_descripcion_carga_academica)
 
 #3.4.4. Notas Último Semestre - FALTA  ####
 # realizado por: Matías
-
 unique(base_antropologia$ea_04) # recodificar a número, recodificar a rangos: MATIAS
+
+
+base_antropologia <- base_antropologia %>% dplyr::rename(notas_ultimo_semestre= ea_04)
+unique(base_antropologia$notas_ultimo_semestre)
+class(base_antropologia$notas_ultimo_semestre)
+
+base_antropologia <- base_antropologia %>%
+  mutate(notas_ultimo_semestre= factor(notas_ultimo_semestre))
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(notas_ultimo_semestre=case_when(notas_ultimo_semestre == "Alrededor de 5,8 creo " ~ "5.8",
+                                         notas_ultimo_semestre == "Entre el año 2024" ~ NA,
+                                         notas_ultimo_semestre == "considerando que el segundo semestre del 2023 cursaba 4to medio, tuve un 6.7" ~ "6.7",
+                                         notas_ultimo_semestre =="fui a un preu y solo fue desempeño asi que no se, solo se que mejore eso cuenta?" ~ NA,
+                                         notas_ultimo_semestre == "." ~ NA,
+                                         notas_ultimo_semestre == "5,6(?" ~ "5.6",
+                                         notas_ultimo_semestre == "58-60" ~ "5.9",
+                                         notas_ultimo_semestre == "Entre 5.0 y 5.5" ~ "5.3",
+                                         notas_ultimo_semestre == "No sé :( " ~ NA,
+                                         notas_ultimo_semestre == "Congele " ~ NA,
+                                         notas_ultimo_semestre == "congelé " ~ NA,
+                                         notas_ultimo_semestre == "6,0 aprox" ~ "6.0",
+                                         notas_ultimo_semestre == "no me acuerdo" ~ NA,
+                                         notas_ultimo_semestre == "estimo que entre un 55-60 pero no tengo certeza" ~ "5.7",
+                                         notas_ultimo_semestre == "5,0 aprox" ~ "5.0",
+                                         notas_ultimo_semestre == "Estoy en primer semestre " ~ NA,
+                                         notas_ultimo_semestre == "estoy en primer año" ~ NA,
+                                         notas_ultimo_semestre == "cómo un 5,0 no sé" ~ "5.0",
+                                         notas_ultimo_semestre == "Arriba de 56 " ~ "5.6",
+                                         notas_ultimo_semestre == "Ingrese recién este año, así que aún no termino el primer semestre "  ~ NA,
+                                         notas_ultimo_semestre == "estoy en mi primer semestre, pero entre las 4 notas que tengo hacen promedio 6.4" ~ NA,
+                                         notas_ultimo_semestre == "A" ~ NA,
+                                         notas_ultimo_semestre == "nose"  ~ NA,
+                                         notas_ultimo_semestre == "Cursando primer semestre " ~ NA,
+                                         notas_ultimo_semestre == "aún tengo muy pocas notas como para responder esta respuesta😿" ~ NA,
+                                         notas_ultimo_semestre == "Este es mi primer semestre" ~ NA,
+                                         notas_ultimo_semestre == "62.0" ~ "6.2",
+                                         notas_ultimo_semestre == "57.0" ~ "5.7",
+                                         notas_ultimo_semestre == "60.0" ~ "6.0",
+                                         notas_ultimo_semestre == "58.0" ~ "5.8",
+                                         notas_ultimo_semestre == "53.0" ~ "5.3",
+                                         notas_ultimo_semestre == "0.0" ~ NA,
+                                         notas_ultimo_semestre == "63.0" ~ "6.3",
+                                         notas_ultimo_semestre == "50.0" ~ "5.0",
+                                         notas_ultimo_semestre == "64.0" ~ "6.4",
+                                         notas_ultimo_semestre == "45.0" ~ "4.5",
+                                         notas_ultimo_semestre == "52.0" ~ "5.2",
+                                         notas_ultimo_semestre == "59.0" ~ "5.9",
+                                         notas_ultimo_semestre == "49.0" ~ "4.9",
+                                         notas_ultimo_semestre == "67.0" ~ "6.7",
+                                         notas_ultimo_semestre == "48.0" ~ "4.8",
+                                         TRUE ~  notas_ultimo_semestre ))
+
+unique(base_antropologia$notas_ultimo_semestre)
+
+
+base_antropologia$notas_ultimo_semestre <- as.numeric(base_antropologia$notas_ultimo_semestre)
+class(base_antropologia$notas_ultimo_semestre)
+table(base_antropologia$notas_ultimo_semestre)
+
+base_antropologia <- base_antropologia %>% 
+  mutate (notas_ultimo_semestre_intervalo= case_when (notas_ultimo_semestre %in% c(4.0:4.9) ~ "4.0 a 4.9", 
+                                                      notas_ultimo_semestre %in% c(5.0:5.9) ~ "5.0 a 5.9", 
+                                                      notas_ultimo_semestre %in% c(6.0:7.0) ~ "6.0 a 7.0", 
+  ))
+
+table(base_antropologia$notas_ultimo_semestre_intervalo)
+
+
+
+
 
 #3.4.5. Satisfacción rendimiento  ####
 # realizado por: Samanta
