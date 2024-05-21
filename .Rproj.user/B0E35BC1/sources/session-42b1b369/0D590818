@@ -1,26 +1,27 @@
 {
-    "id": "500C89E8",
-    "path": "C:/Users/noelc/OneDrive/Escritorio/Cuanti II/Clase 4 19.04/Clase_4_Script.R",
+    "id": "0D590818",
+    "path": "C:/Users/noelc/OneDrive/Escritorio/Cuanti II/SCRIPT_PRUEBA.R",
     "project_path": null,
     "type": "r_source",
     "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1716223400466.0,
+    "created": 1716251795183.0,
     "source_on_save": false,
-    "relative_order": 3,
+    "relative_order": 6,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "403,53",
-        "scrollLine": "384"
+        "docOutlineVisible": "1",
+        "cursorPosition": "495,35",
+        "scrollLine": "491"
     },
     "folds": "",
-    "lastKnownWriteTime": 1713364155,
+    "lastKnownWriteTime": 1713483792,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1713364155,
+    "last_content_update": 1713483792,
     "read_only": false,
     "read_only_alternatives": []
 }

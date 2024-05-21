@@ -231,25 +231,6 @@ unique(base_antropologia$sd_03)
 unique(base_antropologia$sd_01) # 
 unique(base_antropologia$sd_02) # NOEL 
 
-#Rename sd_02
-base_antropologia <- base_antropologia %>% dplyr::rename (identidad_genero =sd_02)
-unique(base_antropologia$identidad_genero)
-
-#df <- df %>%
-# mutate(respuesta_recod = case_when(
-# respuesta %in% c("Categoria A", "Categoria D") ~ "Grupo 1",
-# respuesta %in% c("Categoria B", "Categoria E") ~ "Grupo 2",
-# respuesta %in% c("Categoria C", "Categoria F") ~ "Grupo 3"))
-
-base_antropologia<- base_antropologia %>%
-  mutate(identidad_genero_r= case_when(
-    identidad_genero %in% c("Hombre cisgénero") ~ "Hombre cisgenero",
-    identidad_genero %in% c("Mujer cisgénero") ~ "Mujer cisgenero",
-    identidad_genero %in% c("No binarie",                 
-                            "Agénero", "Género fluido", "Ninguno", "Hombre trans/transmasculino", "Mujer trans/transfemenina") ~ "Persona de genero diverso"))
-
-unique(base_antropologia$identidad_genero_r)
-
 table(base_antropologia$edad) # NOEL
 unique(base_antropologia$edad)
 
@@ -407,6 +388,7 @@ ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = F
         format = "html", digits = 2) %>%  #le doy formate con kable
   kable_classic(full_width = F, html_font = "Cambria") %>% 
   save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
+
 
 
 # renombro nombre de mi tabla
