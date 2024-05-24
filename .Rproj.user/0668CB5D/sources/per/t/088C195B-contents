@@ -745,7 +745,7 @@ write.xlsx(x = base_antropologia,file = "base_antropologia_limpia.xlsx")
 
 
 # Análisis Univariados -------------------------------
-
+names(base_antropologia)
 # Sociodemográficas y de identificación -----------------------------------
 
 # 01. n_encuestador
@@ -808,6 +808,44 @@ respuestas_limpio <- trimws(respuestas, which = "left")
 # obtengo las frecuencias de mis preguntas de respuesta múltiple
 freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
+
+
+
+# Suponiendo que 'base_antropologia' es tu DataFrame
+# Primero, aseguramos que 'ea_09' y 'identidad_genero_r' sean tratados como caracteres
+base_antropologia$ea_09 <- as.character(base_antropologia$ea_09)
+base_antropologia$identidad_genero_r <- as.character(base_antropologia$identidad_genero_r)
+
+# Separamos las respuestas múltiples de 'ea_09' y las cruzamos con 'identidad_genero_r'
+respuestas_ea_09 <- unlist(strsplit(base_antropologia$ea_09, ",\\s*"))
+identidades <- rep(base_antropologia$identidad_genero_r, times = sapply(strsplit(base_antropologia$ea_09, ",\\s*"), length))
+
+# Creamos un nuevo DataFrame con las respuestas e identidades
+data_cruzada <- data.frame(Respuesta = respuestas_ea_09, IdentidadGenero = identidades)
+
+
+
+tabla_porcentajes <- data_cruzada %>%
+  select(Respuesta, IdentidadGenero) %>%
+  droplevels() %>%
+  table() %>% 
+  addmargins(., 2) %>%
+  prop.table(., 2) %>%
+  round(4) * 100
+
+# Convertir la matriz a un data frame para manejar más fácilmente
+df_porcentajes <- as.data.frame.matrix(tabla_porcentajes)
+
+# Agregar una fila de totales al data frame
+df_porcentajes <- bind_rows(df_porcentajes, Total = colSums(df_porcentajes))
+
+# Mostrar el resultado
+print(df_porcentajes)
+
+ctable( x = data_cruzada$Respuesta, y = data_cruzada$IdentidadGenero, prop = "c", justify = "l", chisq = T)
+
+# el cruce no es significativo !
+
 
 #Guardo para graficar
 ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 

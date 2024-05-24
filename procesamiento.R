@@ -574,76 +574,73 @@ table(base_antropologia$ea_03_descripcion_carga_academica)
 unique(base_antropologia$ea_04) # recodificar a número, recodificar a rangos: MATIAS
 
 
-base_antropologia <- base_antropologia %>% dplyr::rename(notas_ultimo_semestre= ea_04)
-unique(base_antropologia$notas_ultimo_semestre)
-class(base_antropologia$notas_ultimo_semestre)
+base_antropologia <- base_antropologia %>% dplyr::rename(ea_04_notas_ultimo_semestre= ea_04)
+unique(base_antropologia$ea_04_notas_ultimo_semestre)
+class(base_antropologia$ea_04_notas_ultimo_semestre)
 
 base_antropologia <- base_antropologia %>%
-  mutate(notas_ultimo_semestre= factor(notas_ultimo_semestre))
+  mutate(ea_04_notas_ultimo_semestre= factor(ea_04_notas_ultimo_semestre))
 
 
 base_antropologia <- base_antropologia %>%
-  mutate(notas_ultimo_semestre=case_when(notas_ultimo_semestre == "Alrededor de 5,8 creo " ~ "5.8",
-                                         notas_ultimo_semestre == "Entre el año 2024" ~ NA,
-                                         notas_ultimo_semestre == "considerando que el segundo semestre del 2023 cursaba 4to medio, tuve un 6.7" ~ "6.7",
-                                         notas_ultimo_semestre =="fui a un preu y solo fue desempeño asi que no se, solo se que mejore eso cuenta?" ~ NA,
-                                         notas_ultimo_semestre == "." ~ NA,
-                                         notas_ultimo_semestre == "5,6(?" ~ "5.6",
-                                         notas_ultimo_semestre == "58-60" ~ "5.9",
-                                         notas_ultimo_semestre == "Entre 5.0 y 5.5" ~ "5.3",
-                                         notas_ultimo_semestre == "No sé :( " ~ NA,
-                                         notas_ultimo_semestre == "Congele " ~ NA,
-                                         notas_ultimo_semestre == "congelé " ~ NA,
-                                         notas_ultimo_semestre == "6,0 aprox" ~ "6.0",
-                                         notas_ultimo_semestre == "no me acuerdo" ~ NA,
-                                         notas_ultimo_semestre == "estimo que entre un 55-60 pero no tengo certeza" ~ "5.7",
-                                         notas_ultimo_semestre == "5,0 aprox" ~ "5.0",
-                                         notas_ultimo_semestre == "Estoy en primer semestre " ~ NA,
-                                         notas_ultimo_semestre == "estoy en primer año" ~ NA,
-                                         notas_ultimo_semestre == "cómo un 5,0 no sé" ~ "5.0",
-                                         notas_ultimo_semestre == "Arriba de 56 " ~ "5.6",
-                                         notas_ultimo_semestre == "Ingrese recién este año, así que aún no termino el primer semestre "  ~ NA,
-                                         notas_ultimo_semestre == "estoy en mi primer semestre, pero entre las 4 notas que tengo hacen promedio 6.4" ~ NA,
-                                         notas_ultimo_semestre == "A" ~ NA,
-                                         notas_ultimo_semestre == "nose"  ~ NA,
-                                         notas_ultimo_semestre == "Cursando primer semestre " ~ NA,
-                                         notas_ultimo_semestre == "aún tengo muy pocas notas como para responder esta respuesta😿" ~ NA,
-                                         notas_ultimo_semestre == "Este es mi primer semestre" ~ NA,
-                                         notas_ultimo_semestre == "62.0" ~ "6.2",
-                                         notas_ultimo_semestre == "57.0" ~ "5.7",
-                                         notas_ultimo_semestre == "60.0" ~ "6.0",
-                                         notas_ultimo_semestre == "58.0" ~ "5.8",
-                                         notas_ultimo_semestre == "53.0" ~ "5.3",
-                                         notas_ultimo_semestre == "0.0" ~ NA,
-                                         notas_ultimo_semestre == "63.0" ~ "6.3",
-                                         notas_ultimo_semestre == "50.0" ~ "5.0",
-                                         notas_ultimo_semestre == "64.0" ~ "6.4",
-                                         notas_ultimo_semestre == "45.0" ~ "4.5",
-                                         notas_ultimo_semestre == "52.0" ~ "5.2",
-                                         notas_ultimo_semestre == "59.0" ~ "5.9",
-                                         notas_ultimo_semestre == "49.0" ~ "4.9",
-                                         notas_ultimo_semestre == "67.0" ~ "6.7",
-                                         notas_ultimo_semestre == "48.0" ~ "4.8",
-                                         TRUE ~  notas_ultimo_semestre ))
+  mutate(ea_04_notas_ultimo_semestre=case_when(ea_04_notas_ultimo_semestre == "Alrededor de 5,8 creo " ~ "5.8",
+                                         ea_04_notas_ultimo_semestre == "Entre el año 2024" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "considerando que el segundo semestre del 2023 cursaba 4to medio, tuve un 6.7" ~ NA,
+                                         ea_04_notas_ultimo_semestre =="fui a un preu y solo fue desempeño asi que no se, solo se que mejore eso cuenta?" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "." ~ NA,
+                                         ea_04_notas_ultimo_semestre == "5,6(?" ~ "5.6",
+                                         ea_04_notas_ultimo_semestre == "58-60" ~ "5.9",
+                                         ea_04_notas_ultimo_semestre == "Entre 5.0 y 5.5" ~ "5.3",
+                                         ea_04_notas_ultimo_semestre == "No sé :( " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "Congele " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "congelé " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "6,0 aprox" ~ "6.0",
+                                         ea_04_notas_ultimo_semestre == "no me acuerdo" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "estimo que entre un 55-60 pero no tengo certeza" ~ "5.7",
+                                         ea_04_notas_ultimo_semestre == "5,0 aprox" ~ "5.0",
+                                         ea_04_notas_ultimo_semestre == "Estoy en primer semestre " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "estoy en primer año" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "cómo un 5,0 no sé" ~ "5.0",
+                                         ea_04_notas_ultimo_semestre == "Arriba de 56 " ~ "5.6",
+                                         ea_04_notas_ultimo_semestre == "Ingrese recién este año, así que aún no termino el primer semestre "  ~ NA,
+                                         ea_04_notas_ultimo_semestre == "estoy en mi primer semestre, pero entre las 4 notas que tengo hacen promedio 6.4" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "A" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "nose"  ~ NA,
+                                         ea_04_notas_ultimo_semestre == "Cursando primer semestre " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "aún tengo muy pocas notas como para responder esta respuesta😿" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "Este es mi primer semestre" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "62.0" ~ "6.2",
+                                         ea_04_notas_ultimo_semestre == "57.0" ~ "5.7",
+                                         ea_04_notas_ultimo_semestre == "60.0" ~ "6.0",
+                                         ea_04_notas_ultimo_semestre == "58.0" ~ "5.8",
+                                         ea_04_notas_ultimo_semestre == "53.0" ~ "5.3",
+                                         ea_04_notas_ultimo_semestre == "0.0" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "63.0" ~ "6.3",
+                                         ea_04_notas_ultimo_semestre == "50.0" ~ "5.0",
+                                         ea_04_notas_ultimo_semestre == "64.0" ~ "6.4",
+                                         ea_04_notas_ultimo_semestre == "45.0" ~ "4.5",
+                                         ea_04_notas_ultimo_semestre == "52.0" ~ "5.2",
+                                         ea_04_notas_ultimo_semestre == "59.0" ~ "5.9",
+                                         ea_04_notas_ultimo_semestre == "49.0" ~ "4.9",
+                                         ea_04_notas_ultimo_semestre == "67.0" ~ "6.7",
+                                         ea_04_notas_ultimo_semestre == "48.0" ~ "4.8",
+                                         TRUE ~  ea_04_notas_ultimo_semestre ))
 
-unique(base_antropologia$notas_ultimo_semestre)
+unique(base_antropologia$ea_04_notas_ultimo_semestre)
 
 
-base_antropologia$notas_ultimo_semestre <- as.numeric(base_antropologia$notas_ultimo_semestre)
-class(base_antropologia$notas_ultimo_semestre)
-table(base_antropologia$notas_ultimo_semestre)
+base_antropologia$ea_04_notas_ultimo_semestre <- as.numeric(base_antropologia$ea_04_notas_ultimo_semestre)
+class(base_antropologia$ea_04_notas_ultimo_semestre)
+table(base_antropologia$ea_04_notas_ultimo_semestre)
 
 base_antropologia <- base_antropologia %>% 
-  mutate (notas_ultimo_semestre_intervalo= case_when (notas_ultimo_semestre >= 4 & notas_ultimo_semestre < 5 ~ "4.0 a 4.9", 
-                                                      notas_ultimo_semestre >= 5 & notas_ultimo_semestre < 6  ~ "5.0 a 5.9", 
-                                                      notas_ultimo_semestre >= 6 & notas_ultimo_semestre < 7 ~ "6.0 a 7.0", 
+  mutate (notas_ultimo_semestre_intervalo= case_when (ea_04_notas_ultimo_semestre >= 4 & ea_04_notas_ultimo_semestre < 5 ~ "4.0 a 4.9", 
+                                                      ea_04_notas_ultimo_semestre >= 5 & ea_04_notas_ultimo_semestre < 6  ~ "5.0 a 5.9", 
+                                                      ea_04_notas_ultimo_semestre >= 6 & ea_04_notas_ultimo_semestre < 7 ~ "6.0 a 7.0", 
                                                       ))
 
 
 table(base_antropologia$notas_ultimo_semestre_intervalo)
-
-
-
 
 
 #3.4.5. Satisfacción rendimiento  ####
@@ -741,13 +738,14 @@ unique(base_antropologia$ea_08)
 
 
 
-# Exportar ----------------------------------------------------------------
+# 4. Exportar ----------------------------------------------------------------
+names(base_antropologia)
 
-write.xlsx(x = base_antropologia,file = "base_antropologia_limpia")
+write.xlsx(x = base_antropologia,file = "base_antropologia_limpia.xlsx")
 
 
 # Análisis Univariados -------------------------------
-
+names(base_antropologia)
 # Sociodemográficas y de identificación -----------------------------------
 
 # 01. n_encuestador
@@ -810,6 +808,44 @@ respuestas_limpio <- trimws(respuestas, which = "left")
 # obtengo las frecuencias de mis preguntas de respuesta múltiple
 freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
+
+
+
+# Suponiendo que 'base_antropologia' es tu DataFrame
+# Primero, aseguramos que 'ea_09' y 'identidad_genero_r' sean tratados como caracteres
+base_antropologia$ea_09 <- as.character(base_antropologia$ea_09)
+base_antropologia$identidad_genero_r <- as.character(base_antropologia$identidad_genero_r)
+
+# Separamos las respuestas múltiples de 'ea_09' y las cruzamos con 'identidad_genero_r'
+respuestas_ea_09 <- unlist(strsplit(base_antropologia$ea_09, ",\\s*"))
+identidades <- rep(base_antropologia$identidad_genero_r, times = sapply(strsplit(base_antropologia$ea_09, ",\\s*"), length))
+
+# Creamos un nuevo DataFrame con las respuestas e identidades
+data_cruzada <- data.frame(Respuesta = respuestas_ea_09, IdentidadGenero = identidades)
+
+
+
+tabla_porcentajes <- data_cruzada %>%
+  select(Respuesta, IdentidadGenero) %>%
+  droplevels() %>%
+  table() %>% 
+  addmargins(., 2) %>%
+  prop.table(., 2) %>%
+  round(4) * 100
+
+# Convertir la matriz a un data frame para manejar más fácilmente
+df_porcentajes <- as.data.frame.matrix(tabla_porcentajes)
+
+# Agregar una fila de totales al data frame
+df_porcentajes <- bind_rows(df_porcentajes, Total = colSums(df_porcentajes))
+
+# Mostrar el resultado
+print(df_porcentajes)
+
+ctable( x = data_cruzada$Respuesta, y = data_cruzada$IdentidadGenero, prop = "c", justify = "l", chisq = T)
+
+# el cruce no es significativo !
+
 
 #Guardo para graficar
 ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
