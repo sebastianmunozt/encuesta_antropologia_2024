@@ -744,19 +744,27 @@ names(base_antropologia)
 write.xlsx(x = base_antropologia,file = "base_antropologia_limpia.xlsx")
 
 
-# Análisis Univariados -------------------------------
+# 5. Análisis Univariados y bivariados-------------------------------
 names(base_antropologia)
-# Sociodemográficas y de identificación -----------------------------------
 
-# 01. n_encuestador
-# Distribución de Frecuencias
+base_antropologia <- read.xlsx("base_antropologia_limpia.xlsx")
+libro_codigos<- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx") # dejo una base sin limpiar para observar nombres de preguntas
+
+
+# 5.1.Sociodemográficas y de identificación -----------------------------------
+
+names(base_antropologia) 
+
+# 5.1.1. n_encuestador ####
+
+# a) Distribución de Frecuencias
 n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
 
 #install.packages("kableExtra")
 library(kableExtra)
 
-n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb() %>%
   kable(col.names = c("Encuestador/a", "Frecuencia", "%", "% Acumulado"),
         caption = "Encuestas por Encuestador/a", 
@@ -764,13 +772,14 @@ n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "fre
   kable_classic(full_width = F, html_font = "Cambria") %>% 
   save_kable(file = "outputs/n_encuestador.png", zoom = 3)
 
+# b) realización de gráfico
 # renombro nombre de mi tabla
 n_encuestador_t <-  n_encuestador_t %>% 
   rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
 
 
 # realizo gráfico
-n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
   geom_col() +
   labs(title = "Encuestas por Encuestador/a",
        subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
@@ -782,15 +791,143 @@ n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(N
   theme_ipsum()
 
 
+# guardo gráfico
+n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Encuestas por Encuestador/a",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Nombre del Encuestador/a") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+ggsave("outputs/n_encuestador_g.png", plot = n_encuestador_g, width = 10, height = 7, dpi = 300)
+
+# 5.1.2. identidad_genero ####
+# responsable NOEL
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.1.3. edad ####
+# responsable 
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.1.4. año_ingreso_carrera ####
+# responsable 
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+# 5.1.5. comuna ####
+# responsable: Sebastián 
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.1.6. clase_social ####
+# responsable: Sebastián 
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.1.8. nivel_educacion_padre ####
+# responsable: 
+# frecuencia
+# gráfico
+# tabla de contingencia
 
 
 
-# Estrés Académico --------------------------------------------------------
+# 5.1.8. nivel_educacion_madre ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
 
 
-# ea_09_cuando_esta_en_periodos_de_evaluaciones_academicas_ha_tenido_alguno_de_estos_sintomas_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
+# 5.1.9. ultimo_colegio ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+
+# 5.2. Estrés Académico --------------------------------------------------------
+
+# 5.2.1. ea_01_horas_estudio_semana ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+
+# 5.2.2. ea_02_horas_estudio_fin_semana ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.2.3. ea_03_descripcion_carga_academica ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+# 5.2.4. ea_04_notas_ultimo_semestre ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+# 5.2.5. ea_05_satisfaccion_rendimiento_academico ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.2.6. ea_06_nivel_estres_ultimo_semestre ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+# 5.2.7. ea_07_efecto_estres_rendimiento ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.2.8. ea_08 ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.2.9. ea_09 ####
+# responsable:   Sebastian
+
+
+
 unique(base_antropologia$ea_09) # SEBASTIÁN
 class(base_antropologia$ea_09)
+
+# frecuencia (respuesta múltiple)
+
 
 #separo las respuestas y creo un vector que las lista
 respuestas <- strsplit(base_antropologia$ea_09, ",") # separo las respuestas que tienen coma (,)
@@ -809,6 +946,43 @@ respuestas_limpio <- trimws(respuestas, which = "left")
 freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
 
+# gráfico
+
+#Guardo para graficar
+ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+
+ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Síntoma", "Frecuencia", "%", "% Acumulado"),
+        caption = "Síntomas de Estress", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
+
+# renombro nombre de mi tabla
+ea_09_graf <-  ea_09_graf %>% 
+  rename(Problema = value, Porcentaje= pct)
+
+
+# realizo gráfico
+g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
+  geom_col() +
+  labs(title = "Síntomas de Estrés Académico",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",
+       y = "Síntoma") +
+  geom_text(data = ea_09_graf %>% filter(rank(-Porcentaje) <= 12), # Solo añadir texto a las primeras 8 categorías
+            aes(label = ifelse(rank(-Porcentaje) <= 12, paste0(round(Porcentaje, 1), "%"), "")),
+            hjust = 1, size = 3, nudge_x = -.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+ggsave("outputs/g_ea_09_graf.png", plot = g_ea_09_graf, width = 10, height = 7, dpi = 300)
+
+
+# tabla de contingencia
 
 
 # Suponiendo que 'base_antropologia' es tu DataFrame
@@ -847,38 +1021,7 @@ ctable( x = data_cruzada$Respuesta, y = data_cruzada$IdentidadGenero, prop = "c"
 # el cruce no es significativo !
 
 
-#Guardo para graficar
-ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
-  tb()
 
-
-ea_09_tabla <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
-  tb() %>%
-  kable(col.names = c("Síntoma", "Frecuencia", "%", "% Acumulado"),
-        caption = "Síntomas de Estress", 
-        format = "html", digits = 2) %>%  #le doy formate con kable
-  kable_classic(full_width = F, html_font = "Cambria") %>% 
-  save_kable(file = "outputs/ea_09_tabla.png", zoom = 3)
-
-# renombro nombre de mi tabla
-ea_09_graf <-  ea_09_graf %>% 
-  rename(Problema = value, Porcentaje= pct)
-
-
-# realizo gráfico
-g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema, Porcentaje), fill= Problema)) +
-  geom_col() +
-  labs(title = "Síntomas de Estrés Académico",
-       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
-       x = "%",
-       y = "Síntoma") +
-  geom_text(data = ea_09_graf %>% filter(rank(-Porcentaje) <= 12), # Solo añadir texto a las primeras 8 categorías
-            aes(label = ifelse(rank(-Porcentaje) <= 12, paste0(round(Porcentaje, 1), "%"), "")),
-            hjust = 1, size = 3, nudge_x = -.9, fontface= "bold", color = "white") +
-  scale_fill_viridis_d(option = "C", guide = "none") +
-  theme_ipsum()
-
-ggsave("outputs/g_ea_09_graf.png", plot = g_ea_09_graf, width = 10, height = 7, dpi = 300)
 
 # ea_10_que_estrategias_utiliza_con_mayor_frecuencia_para_manejar_el_estres_academico_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
 unique(base_antropologia$ea_10) # NOEL 
