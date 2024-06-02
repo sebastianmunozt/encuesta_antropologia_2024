@@ -313,14 +313,79 @@ unique(base_antropologia$año_ingreso_carrera_r)
 table(base_antropologia$año_ingreso_carrera_r)
 
 
-# 3.3.5. Variable Comuna de Residencia - FALTA ####
-# Realizada por Matías
+# 3.3.5. Variable Comuna de Residencia ####
+# Realizada por Sebastián
 unique(base_antropologia$sd_05) 
 
-# Considerar posibles recodificaciones: 
-# a) distancia a la universidad
-# b) indice de prioridad social
-# c) zona de la ciudad 
+#primero la cambio el nombre a la variable
+base_antropologia <- base_antropologia %>% dplyr::rename (comuna =sd_05)
+
+freq(base_antropologia$comuna, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(
+    comuna = stringi::stri_trans_general(comuna, "Latin-ASCII"),  # Convierte caracteres latinos en la columna `comuna` a su equivalente ASCII
+    comuna = tolower(comuna),  # Convierte todos los caracteres en la columna `comuna` a minúsculas
+    comuna = gsub(" ", "_", comuna),  # Reemplaza espacios por guiones bajos en la columna `comuna`
+  )
+
+
+unique(base_antropologia$comuna) #observo mucha variedad de como se escriben los nombres. 
+
+# voy a recodificar los nombres, para ello hago lo siguiente:
+# elimino espacio al final 
+
+base_antropologia <- base_antropologia %>%
+  mutate(comuna = sub("_$", "", comuna))
+
+unique(base_antropologia$comuna)
+
+comuna <-  freq(base_antropologia$comuna, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+base_antropologia <- base_antropologia %>%
+  mutate(comuna=case_when(comuna ==  "santa_lucia" ~ "santiago_centro",
+                                         TRUE ~ comuna))
+
+
+valores_unicos_a<- sort(unique(base_antropologia$comuna), decreasing = F)
+
+#imprimo los valores ordenados, para verlos, copiarlos y recodificarlos. 
+print(valores_unicos_a)
+
+
+# Recodificando la variable comuna en comuna_r1 según las zonas geográficas
+base_antropologia <- base_antropologia %>%
+  mutate(comuna_r1 = case_when(
+    comuna %in% c("quilicura", "huechuraba", "recoleta", "conchali", "renca", "cerro_navia") ~ "Zona Norte",
+    comuna %in% c("la_pintana", "puente_alto", "san_bernardo", "la_granja", "la_cisterna", "lo_espejo", "pedro_aguirre_cerda","la_florida") ~ "Zona Sur",
+    comuna %in% c("las_condes", "la_reina", "vitacura", "penalolen") ~ "Zona Oriente",
+    comuna %in% c("maipu", "pudahuel", "quinta_normal", "lo_prado", "estacion_central") ~ "Zona Poniente",
+    comuna %in% c("paine", "buin", "calera_de_tango", "melipilla", "talagante", "penaflor", "curacavi", "lampa", "til_til") ~ "Periurbano",
+    comuna %in% c("la_serena", "llay_llay", "los_andes", "rancagua", "san_felipe") ~ "Fuera de la Región Metropolitana",
+    comuna %in% c("santiago_centro", "macul", "san_miguel", "san_joaquin", "nunoa", "providencia") ~ "Zona Centro",
+    TRUE ~ comuna  # Mantiene el nombre original si no está en ninguna categoría
+  ))
+
+freq(base_antropologia$comuna_r1, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+
+# recodifico por distancia a la universidad
+base_antropologia <- base_antropologia %>%
+  mutate(comuna_distancia = case_when(
+    comuna %in% c("santiago_centro", "providencia", "estacion_central", "quinta_normal", "recoleta", "santa_lucia") ~ "Vive muy cerca",
+    comuna %in% c("nunoa", "san_miguel", "la_cisterna", "conchali", "lo_prado", "pedro_aguirre_cerda", "la_granja", "lo_espejo") ~ "Vive a distancia cercana",
+    comuna %in% c("macul", "la_florida", "penalolen", "maipu", "pudahuel", "san_joaquin", "renca", "cerro_navia", "quilicura", "huechuraba", "vitacura", "las_condes", "la_reina") ~ "Vive a distancia media",
+    comuna %in% c("puente_alto", "la_pintana", "san_bernardo", "buin", "talagante", "penaflor", "curacavi", "lampa", "melipilla", "calera_de_tango", "til_til", "paine") ~ "Vive a mucha distancia",
+    TRUE ~ "Fuera de Santiago" # Para cualquier comuna no listada
+  ))
+
+
+freq(base_antropologia$comuna_distancia, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
 
 
 # 3.3.6. Variable Clase Social####
@@ -498,7 +563,7 @@ base_antropologia <- base_antropologia %>% dplyr::rename(ea_03_descripcion_carga
 names(base_antropologia)
 class(base_antropologia$ea_03_descripcion_carga_academica)
 
-# Ordeno (fct_relevel) ####
+# Ordeno
 base_antropologia$ea_03_descripcion_carga_academica <- base_antropologia$ea_03_descripcion_carga_academica %>% fct_relevel(c("Ligera", "Moderada", "Pesada", "Muy pesada")) 
 class(base_antropologia$ea_03_descripcion_carga_academica) # ahora están ordenadas y en "factor"
 
@@ -506,8 +571,77 @@ table(base_antropologia$ea_03_descripcion_carga_academica)
 
 #3.4.4. Notas Último Semestre - FALTA  ####
 # realizado por: Matías
-
 unique(base_antropologia$ea_04) # recodificar a número, recodificar a rangos: MATIAS
+
+
+base_antropologia <- base_antropologia %>% dplyr::rename(ea_04_notas_ultimo_semestre= ea_04)
+unique(base_antropologia$ea_04_notas_ultimo_semestre)
+class(base_antropologia$ea_04_notas_ultimo_semestre)
+
+base_antropologia <- base_antropologia %>%
+  mutate(ea_04_notas_ultimo_semestre= factor(ea_04_notas_ultimo_semestre))
+
+
+base_antropologia <- base_antropologia %>%
+  mutate(ea_04_notas_ultimo_semestre=case_when(ea_04_notas_ultimo_semestre == "Alrededor de 5,8 creo " ~ "5.8",
+                                         ea_04_notas_ultimo_semestre == "Entre el año 2024" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "considerando que el segundo semestre del 2023 cursaba 4to medio, tuve un 6.7" ~ NA,
+                                         ea_04_notas_ultimo_semestre =="fui a un preu y solo fue desempeño asi que no se, solo se que mejore eso cuenta?" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "." ~ NA,
+                                         ea_04_notas_ultimo_semestre == "5,6(?" ~ "5.6",
+                                         ea_04_notas_ultimo_semestre == "58-60" ~ "5.9",
+                                         ea_04_notas_ultimo_semestre == "Entre 5.0 y 5.5" ~ "5.3",
+                                         ea_04_notas_ultimo_semestre == "No sé :( " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "Congele " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "congelé " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "6,0 aprox" ~ "6.0",
+                                         ea_04_notas_ultimo_semestre == "no me acuerdo" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "estimo que entre un 55-60 pero no tengo certeza" ~ "5.7",
+                                         ea_04_notas_ultimo_semestre == "5,0 aprox" ~ "5.0",
+                                         ea_04_notas_ultimo_semestre == "Estoy en primer semestre " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "estoy en primer año" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "cómo un 5,0 no sé" ~ "5.0",
+                                         ea_04_notas_ultimo_semestre == "Arriba de 56 " ~ "5.6",
+                                         ea_04_notas_ultimo_semestre == "Ingrese recién este año, así que aún no termino el primer semestre "  ~ NA,
+                                         ea_04_notas_ultimo_semestre == "estoy en mi primer semestre, pero entre las 4 notas que tengo hacen promedio 6.4" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "A" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "nose"  ~ NA,
+                                         ea_04_notas_ultimo_semestre == "Cursando primer semestre " ~ NA,
+                                         ea_04_notas_ultimo_semestre == "aún tengo muy pocas notas como para responder esta respuesta😿" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "Este es mi primer semestre" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "62.0" ~ "6.2",
+                                         ea_04_notas_ultimo_semestre == "57.0" ~ "5.7",
+                                         ea_04_notas_ultimo_semestre == "60.0" ~ "6.0",
+                                         ea_04_notas_ultimo_semestre == "58.0" ~ "5.8",
+                                         ea_04_notas_ultimo_semestre == "53.0" ~ "5.3",
+                                         ea_04_notas_ultimo_semestre == "0.0" ~ NA,
+                                         ea_04_notas_ultimo_semestre == "63.0" ~ "6.3",
+                                         ea_04_notas_ultimo_semestre == "50.0" ~ "5.0",
+                                         ea_04_notas_ultimo_semestre == "64.0" ~ "6.4",
+                                         ea_04_notas_ultimo_semestre == "45.0" ~ "4.5",
+                                         ea_04_notas_ultimo_semestre == "52.0" ~ "5.2",
+                                         ea_04_notas_ultimo_semestre == "59.0" ~ "5.9",
+                                         ea_04_notas_ultimo_semestre == "49.0" ~ "4.9",
+                                         ea_04_notas_ultimo_semestre == "67.0" ~ "6.7",
+                                         ea_04_notas_ultimo_semestre == "48.0" ~ "4.8",
+                                         TRUE ~  ea_04_notas_ultimo_semestre ))
+
+unique(base_antropologia$ea_04_notas_ultimo_semestre)
+
+
+base_antropologia$ea_04_notas_ultimo_semestre <- as.numeric(base_antropologia$ea_04_notas_ultimo_semestre)
+class(base_antropologia$ea_04_notas_ultimo_semestre)
+table(base_antropologia$ea_04_notas_ultimo_semestre)
+
+base_antropologia <- base_antropologia %>% 
+  mutate (notas_ultimo_semestre_intervalo= case_when (ea_04_notas_ultimo_semestre >= 4 & ea_04_notas_ultimo_semestre < 5 ~ "4.0 a 4.9", 
+                                                      ea_04_notas_ultimo_semestre >= 5 & ea_04_notas_ultimo_semestre < 6  ~ "5.0 a 5.9", 
+                                                      ea_04_notas_ultimo_semestre >= 6 & ea_04_notas_ultimo_semestre < 7 ~ "6.0 a 7.0", 
+                                                      ))
+
+
+table(base_antropologia$notas_ultimo_semestre_intervalo)
+
 
 #3.4.5. Satisfacción rendimiento  ####
 # realizado por: Samanta
@@ -604,24 +738,33 @@ unique(base_antropologia$ea_08)
 
 
 
-# Exportar ----------------------------------------------------------------
+# 4. Exportar ----------------------------------------------------------------
+names(base_antropologia)
 
-write.xlsx(x = base_antropologia,file = "base_antropologia_limpia")
+write.xlsx(x = base_antropologia,file = "base_antropologia_limpia.xlsx")
 
 
-# Análisis Univariados -------------------------------
+# 5. Análisis Univariados y bivariados-------------------------------
+names(base_antropologia)
 
-# Sociodemográficas y de identificación -----------------------------------
+base_antropologia <- read.xlsx("base_antropologia_limpia.xlsx")
+libro_codigos<- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx") # dejo una base sin limpiar para observar nombres de preguntas
 
-# 01. n_encuestador
-# Distribución de Frecuencias
+
+# 5.1.Sociodemográficas y de identificación -----------------------------------
+
+names(base_antropologia) 
+
+# 5.1.1. n_encuestador ####
+
+# a) Distribución de Frecuencias
 n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
 
-#install.packages("kableExtra")
+install.packages("kableExtra")
 library(kableExtra)
 
-n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb() %>%
   kable(col.names = c("Encuestador/a", "Frecuencia", "%", "% Acumulado"),
         caption = "Encuestas por Encuestador/a", 
@@ -629,13 +772,14 @@ n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "fre
   kable_classic(full_width = F, html_font = "Cambria") %>% 
   save_kable(file = "outputs/n_encuestador.png", zoom = 3)
 
+# b) realización de gráfico
 # renombro nombre de mi tabla
 n_encuestador_t <-  n_encuestador_t %>% 
   rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
 
 
 # realizo gráfico
-n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
   geom_col() +
   labs(title = "Encuestas por Encuestador/a",
        subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
@@ -647,15 +791,157 @@ n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(N
   theme_ipsum()
 
 
+# guardo gráfico
+n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Encuestas por Encuestador/a",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Nombre del Encuestador/a") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+ggsave("outputs/n_encuestador_g.png", plot = n_encuestador_g, width = 10, height = 7, dpi = 300)
+
+# 5.1.2. identidad_genero ####
+# responsable NOEL
+
+# frecuencia
+identidad_genero_t <- freq(base_antropologia$identidad_genero, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$identidad_genero, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Encuestador/a", "Frecuencia", "%", "% Acumulado"),
+        caption = "Identidad de género", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/identidad_genero.png", zoom = 3)
+
+
+# gráfico
+
+# tabla de contingencia
+
+
+# 5.1.3. edad ####
+# responsable 
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.1.4. año_ingreso_carrera ####
+# responsable 
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+# 5.1.5. comuna ####
+# responsable: Sebastián 
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.1.6. clase_social ####
+# responsable: Sebastián 
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.1.8. nivel_educacion_padre ####
+# responsable: 
+# frecuencia
+# gráfico
+# tabla de contingencia
 
 
 
-# Estrés Académico --------------------------------------------------------
+# 5.1.8. nivel_educacion_madre ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
 
 
-# ea_09_cuando_esta_en_periodos_de_evaluaciones_academicas_ha_tenido_alguno_de_estos_sintomas_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
+# 5.1.9. ultimo_colegio ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+
+# 5.2. Estrés Académico --------------------------------------------------------
+
+# 5.2.1. ea_01_horas_estudio_semana ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+
+# 5.2.2. ea_02_horas_estudio_fin_semana ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.2.3. ea_03_descripcion_carga_academica ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+# 5.2.4. ea_04_notas_ultimo_semestre ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+# 5.2.5. ea_05_satisfaccion_rendimiento_academico ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.2.6. ea_06_nivel_estres_ultimo_semestre ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+# 5.2.7. ea_07_efecto_estres_rendimiento ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.2.8. ea_08 ####
+# responsable:  
+# frecuencia
+# gráfico
+# tabla de contingencia
+
+
+# 5.2.9. ea_09 ####
+# responsable:   Sebastian
+
+
+
 unique(base_antropologia$ea_09) # SEBASTIÁN
 class(base_antropologia$ea_09)
+
+# frecuencia (respuesta múltiple)
+
 
 #separo las respuestas y creo un vector que las lista
 respuestas <- strsplit(base_antropologia$ea_09, ",") # separo las respuestas que tienen coma (,)
@@ -673,6 +959,8 @@ respuestas_limpio <- trimws(respuestas, which = "left")
 # obtengo las frecuencias de mis preguntas de respuesta múltiple
 freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
+
+# gráfico
 
 #Guardo para graficar
 ea_09_graf <- freq(respuestas_limpio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
@@ -706,6 +994,48 @@ g_ea_09_graf <- ggplot(ea_09_graf, aes(x = Porcentaje, y = fct_reorder(Problema,
   theme_ipsum()
 
 ggsave("outputs/g_ea_09_graf.png", plot = g_ea_09_graf, width = 10, height = 7, dpi = 300)
+
+
+# tabla de contingencia
+
+
+# Suponiendo que 'base_antropologia' es tu DataFrame
+# Primero, aseguramos que 'ea_09' y 'identidad_genero_r' sean tratados como caracteres
+base_antropologia$ea_09 <- as.character(base_antropologia$ea_09)
+base_antropologia$identidad_genero_r <- as.character(base_antropologia$identidad_genero_r)
+
+# Separamos las respuestas múltiples de 'ea_09' y las cruzamos con 'identidad_genero_r'
+respuestas_ea_09 <- unlist(strsplit(base_antropologia$ea_09, ",\\s*"))
+identidades <- rep(base_antropologia$identidad_genero_r, times = sapply(strsplit(base_antropologia$ea_09, ",\\s*"), length))
+
+# Creamos un nuevo DataFrame con las respuestas e identidades
+data_cruzada <- data.frame(Respuesta = respuestas_ea_09, IdentidadGenero = identidades)
+
+
+
+tabla_porcentajes <- data_cruzada %>%
+  select(Respuesta, IdentidadGenero) %>%
+  droplevels() %>%
+  table() %>% 
+  addmargins(., 2) %>%
+  prop.table(., 2) %>%
+  round(4) * 100
+
+# Convertir la matriz a un data frame para manejar más fácilmente
+df_porcentajes <- as.data.frame.matrix(tabla_porcentajes)
+
+# Agregar una fila de totales al data frame
+df_porcentajes <- bind_rows(df_porcentajes, Total = colSums(df_porcentajes))
+
+# Mostrar el resultado
+print(df_porcentajes)
+
+ctable( x = data_cruzada$Respuesta, y = data_cruzada$IdentidadGenero, prop = "c", justify = "l", chisq = T)
+
+# el cruce no es significativo !
+
+
+
 
 # ea_10_que_estrategias_utiliza_con_mayor_frecuencia_para_manejar_el_estres_academico_seleccione_todas_las_alternativas_que_correspondan_con_su_caso",
 unique(base_antropologia$ea_10) # NOEL 

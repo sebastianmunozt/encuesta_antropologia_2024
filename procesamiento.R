@@ -761,7 +761,7 @@ names(base_antropologia)
 n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
 
-#install.packages("kableExtra")
+install.packages("kableExtra")
 library(kableExtra)
 
 freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
@@ -807,8 +807,22 @@ ggsave("outputs/n_encuestador_g.png", plot = n_encuestador_g, width = 10, height
 
 # 5.1.2. identidad_genero ####
 # responsable NOEL
+
 # frecuencia
+identidad_genero_t <- freq(base_antropologia$identidad_genero, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$identidad_genero, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Encuestador/a", "Frecuencia", "%", "% Acumulado"),
+        caption = "Identidad de género", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/identidad_genero.png", zoom = 3)
+
+
 # gráfico
+
 # tabla de contingencia
 
 
