@@ -824,9 +824,8 @@ freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FA
 n_encuestador_t <-  n_encuestador_t %>% 
   rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
 
-
 # realizo gráfico
-ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
   geom_col() +
   labs(title = "Encuestas por Encuestador/a",
        subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
@@ -839,16 +838,6 @@ ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia),
 
 
 # guardo gráfico
-n_encuestador_g <- ggplot(n_encuestador_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
-  geom_col() +
-  labs(title = "Encuestas por Encuestador/a",
-       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
-       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
-       y = "Nombre del Encuestador/a") +
-  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
-            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
-  scale_fill_viridis_d(option = "C", guide = "none") +
-  theme_ipsum()
 
 ggsave("outputs/n_encuestador_g.png", plot = n_encuestador_g, width = 10, height = 7, dpi = 300)
 
@@ -869,9 +858,55 @@ freq(base_antropologia$identidad_genero, prop=TRUE, order = "freq", report.nas =
 
 
 # gráfico
+identidad_genero_t <-  identidad_genero_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+identidad_genero_g <- ggplot(identidad_genero_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Identidad de género",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Identidad de género") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/identidad_genero_g.png", plot = identidad_genero_g, width = 10, height = 7, dpi = 300)
 
 # tabla de contingencia
 
+# Aseguramos que las columnas sean tratadas como caracteres
+base_antropologia$ea_06_nivel_estres_ultimo_semestre_r <- as.character(base_antropologia$ea_06_nivel_estres_ultimo_semestre_r)
+base_antropologia$identidad_genero_r <- as.character(base_antropologia$identidad_genero_r)
+
+# Creamos un nuevo DataFrame con las respuestas e identidades
+data_cruzada <- data.frame(Estres = base_antropologia$ea_06_nivel_estres_ultimo_semestre_r, 
+                           IdentidadGenero = base_antropologia$identidad_genero_r)
+
+# Calcular frecuencias y porcentajes
+tabla_porcentajes <- data_cruzada %>%
+  select(Estres, IdentidadGenero) %>%
+  droplevels() %>%
+  table() %>%
+  addmargins(., 2) %>%
+  prop.table(., 2) %>%
+  round(4) * 100
+
+# Convertir la matriz a un data frame para manejar más fácilmente
+df_porcentajes <- as.data.frame.matrix(tabla_porcentajes)
+
+# Agregar una fila de totales al data frame
+df_porcentajes <- bind_rows(df_porcentajes, Total = colSums(df_porcentajes))
+
+# Mostrar el resultado
+print(df_porcentajes)
+
+ctable(x = data_cruzada$Estres, y = data_cruzada$IdentidadGenero, prop = "c", justify = "l", chisq = TRUE)
 
 # 5.1.3. edad ####
 # responsable 
