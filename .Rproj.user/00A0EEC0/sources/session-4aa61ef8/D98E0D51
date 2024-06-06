@@ -3,24 +3,24 @@
     "path": "~/GitHub/encuesta_antropologia_2024/procesamiento.R",
     "project_path": "procesamiento.R",
     "type": "r_source",
-    "hash": "502976260",
+    "hash": "0",
     "contents": "",
-    "dirty": false,
+    "dirty": true,
     "created": 1715901060609.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "243,122",
-        "scrollLine": "229"
+        "cursorPosition": "1014,19",
+        "scrollLine": "1006"
     },
     "folds": "",
-    "lastKnownWriteTime": 1717459293,
+    "lastKnownWriteTime": 1717633054,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1717459293,
+    "last_content_update": 1717637608986,
     "read_only": false,
     "read_only_alternatives": []
 }

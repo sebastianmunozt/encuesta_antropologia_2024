@@ -1,0 +1,28 @@
+{
+    "id": "059D9189",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1717635417336.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "id": "6467bf82fd934584bc8468f430277cf4",
+        "name": "n_encuestador_g",
+        "title": "n_encuestador_g",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1717633054,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1717635417336,
+    "read_only": false,
+    "read_only_alternatives": []
+}
