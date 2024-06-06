@@ -220,11 +220,41 @@ base_antropologia <- base_antropologia %>%
                                  n_encuestador== "victor" ~ "Victor Avalos",
                                  n_encuestador== "victor_avalos" ~ "Victor Avalos",
                                  n_encuestador== "ignacia_fica" ~ "Ricardo Quiroz",
+                                 n_encuestador== "vicente" ~ "Consuelo Llanten",
+                                 n_encuestador== "noel_casas_-cordero_y_samanta_letelier_" ~ "Amanda Baez",
+                                 n_encuestador== "benjamin_(iris)" ~ "Venecia Moreno",
                                  TRUE ~ n_encuestador))
 table(base_antropologia$n_encuestador)
 
-table(base_antropologia$n_encuestador)
+# ea_05_que_tan_satisfecho_esta_con_tu_rendimiento_academico_en_el_ultimo_semestre_finalizado_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
+unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
 
+base_antropologia <- base_antropologia %>% dplyr::rename(satisfaccion_rendimiento_academico = ea_05)
+names(base_antropologia)
+unique(base_antropologia$satisfaccion_rendimiento_academico)
+table(base_antropologia$satisfaccion_rendimiento_academico)
+class(base_antropologia$satisfaccion_rendimiento_academico)
+base_antropologia <- base_antropologia %>% 
+  mutate(satisfaccion_rendimiento_academico = as.factor(satisfaccion_rendimiento_academico))
+
+base_antropologia <- base_antropologia %>% 
+  mutate(satisfaccion_rendimiento_academico = case_when(satisfaccion_rendimiento_academico== "Insatisfecho" ~ "Insatisfecho",
+                                                        satisfaccion_rendimiento_academico== "Muy insatisfecho" ~ "Insatisfecho",
+                                                        satisfaccion_rendimiento_academico== "Muy Satisfecho" ~ "Satisfecho",
+                                                        satisfaccion_rendimiento_academico== "Satisfecho" ~ "Satisfecho"))
+
+table(base_antropologia$satisfaccion_rendimiento_academico)
+
+# ea_03_como_describiria_su_carga_academica_actual"
+unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
+
+base_antropologia <- base_antropologia %>% dplyr::rename(descripcion_carga_academica = ea_03)
+names(base_antropologia)
+class(base_antropologia$descripcion_carga_academica)
+
+base_antropologia <- base_antropologia %>% 
+  mutate(descripcion_carga_academica = as.factor(descripcion_carga_academica))
+unique(base_antropologia$descripcion_carga_academica)
 
 
 
