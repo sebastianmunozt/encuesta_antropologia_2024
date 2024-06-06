@@ -1,6 +1,6 @@
 
 # 1. Instalo y abro paquetes -------------------------------------------------
-# install.packages("pacman")
+ install.packages("pacman")
 pacman::p_load(tidyverse,# Universo de paquetes : tidyr, dplyr, ggplot2,readr,purrr,tibble, stringr, forcats
                openxlsx,#leer archivos xlsx
                readxl,# leer archivos xl      #dos formatos de excel xlsx y xl
@@ -143,6 +143,20 @@ base_antropologia <- base_antropologia %>%
                                  n_encuestador=="alonso_silva_" ~ "Alonso Silva",
                                  n_encuestador=="amanda_baez" ~ "Amanda Baez",
                                  n_encuestador=="amanda_baez_" ~ "Amanda Baez",
+<<<<<<< HEAD
+                                 TRUE ~n_encuestador))
+
+base_antropologia <- base_antropologia %>%
+  mutate(n_encuestador=case_when(n_encuestador=="carla_(buffy)" ~ "Alejandra Mondaca",
+                                 n_encuestador=="alexi" ~ "Alejandra Mondaca",
+                                 n_encuestador=="alejandra_mondaca" ~ "Alejandra Mondaca",
+                                 n_encuestador=="alejandra_mondaca_" ~ "Alejandra Mondaca",
+                                 n_encuestador=="alonso_silva" ~ "Alonso Silva", 
+                                 n_encuestador=="alonso_silva_" ~ "Alonso Silva",
+                                 n_encuestador=="amanda_baez" ~ "Amanda Baez",
+                                 n_encuestador=="amanda_baez_" ~ "Amanda Baez",
+=======
+>>>>>>> f7abcbb4c8da990675ca98fe197b842b417d57ce
                                  n_encuestador=="antonia_ramirez_" ~ "Antonia Ramirez",
                                  n_encuestador=="camila_crisostomo" ~ "Camila Crisostomo",
                                  n_encuestador=="camila_segura" ~ "Camila Segura",
@@ -219,6 +233,39 @@ base_antropologia <- base_antropologia %>%
                                  TRUE ~ n_encuestador))
 table(base_antropologia$n_encuestador)
 
+<<<<<<< HEAD
+# ea_05_que_tan_satisfecho_esta_con_tu_rendimiento_academico_en_el_ultimo_semestre_finalizado_considere_el_ultimo_semestre_finalizado_como_el_segundo_semestre_del_ano_2023",
+unique(base_antropologia$ea_05) # recodificar en 2: SAMANTA
+
+base_antropologia <- base_antropologia %>% dplyr::rename(satisfaccion_rendimiento_academico = ea_05)
+names(base_antropologia)
+unique(base_antropologia$satisfaccion_rendimiento_academico)
+table(base_antropologia$satisfaccion_rendimiento_academico)
+class(base_antropologia$satisfaccion_rendimiento_academico)
+base_antropologia <- base_antropologia %>% 
+  mutate(satisfaccion_rendimiento_academico = as.factor(satisfaccion_rendimiento_academico))
+
+base_antropologia <- base_antropologia %>% 
+  mutate(satisfaccion_rendimiento_academico = case_when(satisfaccion_rendimiento_academico== "Insatisfecho" ~ "Insatisfecho",
+                                                        satisfaccion_rendimiento_academico== "Muy insatisfecho" ~ "Insatisfecho",
+                                                        satisfaccion_rendimiento_academico== "Muy Satisfecho" ~ "Satisfecho",
+                                                        satisfaccion_rendimiento_academico== "Satisfecho" ~ "Satisfecho"))
+
+table(base_antropologia$satisfaccion_rendimiento_academico)
+
+# ea_03_como_describiria_su_carga_academica_actual"
+unique(base_antropologia$ea_03) # transformar en factor y ordenar: SAMANTA
+
+base_antropologia <- base_antropologia %>% dplyr::rename(descripcion_carga_academica = ea_03)
+names(base_antropologia)
+class(base_antropologia$descripcion_carga_academica)
+
+base_antropologia <- base_antropologia %>% 
+  mutate(descripcion_carga_academica = as.factor(descripcion_carga_academica))
+unique(base_antropologia$descripcion_carga_academica)
+
+=======
+>>>>>>> f7abcbb4c8da990675ca98fe197b842b417d57ce
 
 # 3.3.2. Variable Identidad de Género ####
 # Realizada por Noel
@@ -831,10 +878,35 @@ identidad_genero_g <- ggplot(identidad_genero_t, aes(x = Frecuencia, y = fct_reo
 
 ggsave("outputs/identidad_genero_g.png", plot = identidad_genero_g, width = 10, height = 7, dpi = 300)
 
-
-
 # tabla de contingencia
 
+# Aseguramos que las columnas sean tratadas como caracteres
+base_antropologia$ea_06_nivel_estres_ultimo_semestre_r <- as.character(base_antropologia$ea_06_nivel_estres_ultimo_semestre_r)
+base_antropologia$identidad_genero_r <- as.character(base_antropologia$identidad_genero_r)
+
+# Creamos un nuevo DataFrame con las respuestas e identidades
+data_cruzada <- data.frame(Estres = base_antropologia$ea_06_nivel_estres_ultimo_semestre_r, 
+                           IdentidadGenero = base_antropologia$identidad_genero_r)
+
+# Calcular frecuencias y porcentajes
+tabla_porcentajes <- data_cruzada %>%
+  select(Estres, IdentidadGenero) %>%
+  droplevels() %>%
+  table() %>%
+  addmargins(., 2) %>%
+  prop.table(., 2) %>%
+  round(4) * 100
+
+# Convertir la matriz a un data frame para manejar más fácilmente
+df_porcentajes <- as.data.frame.matrix(tabla_porcentajes)
+
+# Agregar una fila de totales al data frame
+df_porcentajes <- bind_rows(df_porcentajes, Total = colSums(df_porcentajes))
+
+# Mostrar el resultado
+print(df_porcentajes)
+
+ctable(x = data_cruzada$Estres, y = data_cruzada$IdentidadGenero, prop = "c", justify = "l", chisq = TRUE)
 
 # 5.1.3. edad ####
 # responsable 

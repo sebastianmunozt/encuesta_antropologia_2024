@@ -878,10 +878,35 @@ identidad_genero_g <- ggplot(identidad_genero_t, aes(x = Frecuencia, y = fct_reo
 
 ggsave("outputs/identidad_genero_g.png", plot = identidad_genero_g, width = 10, height = 7, dpi = 300)
 
-
-
 # tabla de contingencia
 
+# Aseguramos que las columnas sean tratadas como caracteres
+base_antropologia$ea_06_nivel_estres_ultimo_semestre_r <- as.character(base_antropologia$ea_06_nivel_estres_ultimo_semestre_r)
+base_antropologia$identidad_genero_r <- as.character(base_antropologia$identidad_genero_r)
+
+# Creamos un nuevo DataFrame con las respuestas e identidades
+data_cruzada <- data.frame(Estres = base_antropologia$ea_06_nivel_estres_ultimo_semestre_r, 
+                           IdentidadGenero = base_antropologia$identidad_genero_r)
+
+# Calcular frecuencias y porcentajes
+tabla_porcentajes <- data_cruzada %>%
+  select(Estres, IdentidadGenero) %>%
+  droplevels() %>%
+  table() %>%
+  addmargins(., 2) %>%
+  prop.table(., 2) %>%
+  round(4) * 100
+
+# Convertir la matriz a un data frame para manejar más fácilmente
+df_porcentajes <- as.data.frame.matrix(tabla_porcentajes)
+
+# Agregar una fila de totales al data frame
+df_porcentajes <- bind_rows(df_porcentajes, Total = colSums(df_porcentajes))
+
+# Mostrar el resultado
+print(df_porcentajes)
+
+ctable(x = data_cruzada$Estres, y = data_cruzada$IdentidadGenero, prop = "c", justify = "l", chisq = TRUE)
 
 # 5.1.3. edad ####
 # responsable 
