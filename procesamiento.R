@@ -908,6 +908,8 @@ print(df_porcentajes)
 
 ctable(x = data_cruzada$Estres, y = data_cruzada$IdentidadGenero, prop = "c", justify = "l", chisq = TRUE)
 
+#hay una relación significativa entre las dos variables.
+
 # 5.1.3. edad ####
 # responsable 
 # frecuencia
