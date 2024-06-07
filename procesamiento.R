@@ -803,6 +803,7 @@ libro_codigos<- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx") # dejo
 names(base_antropologia) 
 
 # 5.1.1. n_encuestador ####
+#Noel
 
 # a) Distribución de Frecuencias
 n_encuestador_t <- freq(base_antropologia$n_encuestador, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
@@ -908,6 +909,8 @@ print(df_porcentajes)
 
 ctable(x = data_cruzada$Estres, y = data_cruzada$IdentidadGenero, prop = "c", justify = "l", chisq = TRUE)
 
+#hay una relación significativa entre las dos variables.
+
 # 5.1.3. edad ####
 # responsable 
 # frecuencia
@@ -961,17 +964,82 @@ ctable(x = data_cruzada$Estres, y = data_cruzada$IdentidadGenero, prop = "c", ju
 # 5.2. Estrés Académico --------------------------------------------------------
 
 # 5.2.1. ea_01_horas_estudio_semana ####
-# responsable:  
+# responsable:Noel
 # frecuencia
+ea_01_horas_estudio_semana_t <- freq(base_antropologia$ea_01_horas_estudio_semana, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+install.packages("kableExtra")
+library(kableExtra)
+
+freq(base_antropologia$ea_01_horas_estudio_semana, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Horas de estudio en la semana", "Frecuencia", "%", "% Acumulado"),
+        caption = "Horas de estudio en la semana", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/ea_01_horas_estudio_semana.png", zoom = 3)
+
+
 # gráfico
+ea_01_horas_estudio_semana_t <-  ea_01_horas_estudio_semana_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+ea_01_horas_estudio_semana_g <- ggplot(ea_01_horas_estudio_semana_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Horas de estudio en la semana",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Horas de estudio en la semana") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/ea_01_horas_estudio_semana_g.png", plot = ea_01_horas_estudio_semana_g, width = 10, height = 7, dpi = 300)
+
+
 # tabla de contingencia
 
 
-
 # 5.2.2. ea_02_horas_estudio_fin_semana ####
-# responsable:  
-# frecuencia
+# responsable:Noel  
+ea_02_horas_estudio_fin_semana_t <- freq(base_antropologia$ea_02_horas_estudio_fin_semana, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$ea_02_horas_estudio_fin_semana, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Horas de estudio en el fin de semana", "Frecuencia", "%", "% Acumulado"),
+        caption = "Horas de estudio en el fin de semana", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/ea_02_horas_estudio_fin_semana.png", zoom = 3)
+
+
 # gráfico
+ea_02_horas_estudio_fin_semana_t <-  ea_02_horas_estudio_fin_semana_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+# realizo gráfico
+ea_02_horas_estudio_fin_semana_g <- ggplot(ea_02_horas_estudio_fin_semana_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Horas de estudio en el fin de semana",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Horas de estudio en el fin de semana") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/ea_02_horas_estudio_fin_semana_g.png", plot = ea_02_horas_estudio_fin_semana_g, width = 10, height = 7, dpi = 300)
+
 # tabla de contingencia
 
 
