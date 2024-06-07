@@ -934,17 +934,83 @@ ggsave("outputs/identidad_estres.png", plot = identidad_estres_g, width = 10, he
 
 
 # 5.1.3. edad ####
-# responsable 
+# responsable SAMANTA
 # frecuencia
+edad_t <- freq(base_antropologia$edad, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$edad, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Edad", "Frecuencia", "%", "% Acumulado"),
+        caption = "Edades", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/edades.png", zoom = 3)
+
+
+#error con funcion svae_kable: png tabla de frecuencia se encontrará en la carpeta outputs como "edades.png"
+
 # gráfico
-# tabla de contingencia
+edad_t <-  edad_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+edad_g <- ggplot(edad_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Edades",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Edad") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/edades_g.png", plot = edad_g, width = 10, height = 7, dpi = 300)
 
 
 # 5.1.4. año_ingreso_carrera ####
-# responsable 
+# responsable SAMANTA
 # frecuencia
+# frecuencia
+anio_ingreso_t <- freq(base_antropologia$año_ingreso_carrera, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$año_ingreso_carrera, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Año de ingreso", "Frecuencia", "%", "% Acumulado"),
+        caption = "Ingreso a la carrera", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/anio_ingreso.png", zoom = 3)
+
+#error con funcion svae_kable: png tabla de frecuencia se encontrará en la carpeta outputs como "anio_ingreso.png"
+
+
 # gráfico
-# tabla de contingencia
+anio_ingreso_t <-  anio_ingreso_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+anio_ingreso_g <- ggplot(anio_ingreso_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Años de Ingreso",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Años") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/anio_ingreso_g.png", plot = anio_ingreso_g, width = 10, height = 7, dpi = 300)
+
 
 # 5.1.5. comuna ####
 # responsable: Sebastián 
@@ -961,26 +1027,116 @@ ggsave("outputs/identidad_estres.png", plot = identidad_estres_g, width = 10, he
 
 
 # 5.1.8. nivel_educacion_padre ####
-# responsable: 
+# responsable: SAMANTA
 # frecuencia
+nivel_educacional_padre_t <- freq(base_antropologia$nivel_educacion_padre, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$nivel_educacion_padre, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Nivel educacional", "Frecuencia", "%", "% Acumulado"),
+        caption = "Maximo nivel educativo por la padre", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") 
+
+#  save_kable(file = "outputs/nivel_educacional_madre.png", zoom = 3)
+
+#error con funcion save_kable: png tabla de frecuencia se encontrará en la carpeta como "nivel_educacional_padre.png"
+
 # gráfico
-# tabla de contingencia
+nivel_educacional_padre_t <-  nivel_educacional_padre_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
 
 
+# realizo gráfico
+nivel_educacional_padre_g <- ggplot(nivel_educacional_padre_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Maximo nivel educativo de la padre",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "nivel educacional") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/nivel_educacional_padre_g.png", plot = nivel_educacional_padre_g, width = 10, height = 7, dpi = 300)
 
 # 5.1.8. nivel_educacion_madre ####
-# responsable:  
-# frecuencia
-# gráfico
-# tabla de contingencia
+nivel_educacional_madre_t <- freq(base_antropologia$nivel_educacion_madre, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
 
+freq(base_antropologia$nivel_educacion_madre, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Nivel educacional", "Frecuencia", "%", "% Acumulado"),
+        caption = "Maximo nivel educativo por la madre", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") 
+
+#  save_kable(file = "outputs/nivel_educacional_madre.png", zoom = 3)
+
+#error con funcion save_kable: png tabla de frecuencia se encontrará en la carpeta como "satisfaccion_rendimiento_academico.png"
+
+# gráfico
+nivel_educacional_madre_t <-  nivel_educacional_madre_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+nivel_educacional_madre_g <- ggplot(nivel_educacional_madre_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Maximo nivel educativo de la madre",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "nivel educacional") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/nivel_educacional_madre_g.png", plot = nivel_educacional_madre_g, width = 10, height = 7, dpi = 300)
 
 # 5.1.9. ultimo_colegio ####
-# responsable:  
+# responsable:  SAMI
+table(base_antropologia$ultimo_colegio)
 # frecuencia
-# gráfico
-# tabla de contingencia
+ultimo_colegio_t <- freq(base_antropologia$ultimo_colegio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
 
+freq(base_antropologia$ultimo_colegio, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Tipo", "Frecuencia", "%", "% Acumulado"),
+        caption = "Tipo de establecimiento educacional", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") 
+
+#  save_kable(file = "outputs/ultimo_colegio.png", zoom = 3)
+
+#error con funcion save_kable: png tabla de frecuencia se encontrará en la carpeta como "satisfaccion_rendimiento_academico.png"
+
+# gráfico
+ultimo_colegio_t <-  ultimo_colegio_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+# realizo gráfico
+ultimo_colegio_g <- ggplot(ultimo_colegio_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Tipo de establecimiento educacional del ultimo colegio",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "tipo") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/ultimo_colegio_g.png", plot = ultimo_colegio_g, width = 10, height = 7, dpi = 300)
 
 
 # 5.2. Estrés Académico --------------------------------------------------------
@@ -1135,46 +1291,273 @@ ggsave("outputs/ea_02_horas_estudio_fin_semana_g.png", plot = ea_02_horas_estudi
 
 # tabla de contingencia
 
-
-
 # 5.2.3. ea_03_descripcion_carga_academica ####
-# responsable:  
+# responsable:  SAMANTA
 # frecuencia
+
+table(base_antropologia$ea_03_descripcion_carga_academica)
+
+carga_academica_t <- freq(base_antropologia$ea_03_descripcion_carga_academica, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$ea_03_descripcion_carga_academica, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Descripcion de la Carga academica", "Frecuencia", "%", "% Acumulado"),
+        caption = "Carga academica", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/carga_academica.png", zoom = 3)
+
+#error con funcion save_kable: png tabla de frecuencia se encontrará en la carpeta outputs como "carga_academica.png"
+
 # gráfico
-# tabla de contingencia
+carga_academica_t <-  carga_academica_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+carga_academica_g <- ggplot(carga_academica_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Descripcion de la Carga Academica",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "descripcion de carga") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum() 
+ggsave("outputs/carga_academica_g.png", plot = carga_academica_g, width = 10, height = 7, dpi = 300)
+
+
+#TABLA DE CONTINGENCIA
+#ea03_descripcion_carga_academica y comunas
+
+base_antropologia$ea_03_descripcion_carga_academica <- as.character(base_antropologia$ea_03_descripcion_carga_academica)
+base_antropologia$comuna <- as.character(base_antropologia$comuna)
+
+# Separamos las respuestas múltiples de 'ea_09' y las cruzamos con 'identidad_genero_r'
+respuestas_descripcion_carga_academica <- unlist(strsplit(base_antropologia$ea_03_descripcion_carga_academica, ",\\s*"))
+comunas <- rep(base_antropologia$comuna, times = sapply(strsplit(base_antropologia$ea_03_descripcion_carga_academica, ",\\s*"), length))
+
+# Creamos un nuevo DataFrame con las respuestas e identidades
+data_cruzada <- data.frame(Respuesta = respuestas_descripcion_carga_academica, Comunas = comunas)
+
+tabla_porcentajes <- data_cruzada %>%
+  select(Respuesta, Comunas) %>%
+  droplevels() %>%
+  table() %>% 
+  addmargins(., 2) %>%
+  prop.table(., 2) %>%
+  round(4) * 100
+
+# Convertir la matriz a un data frame para manejar más fácilmente
+df_porcentajes <- as.data.frame.matrix(tabla_porcentajes)
+
+# Agregar una fila de totales al data frame
+df_porcentajes <- bind_rows(df_porcentajes, Total = colSums(df_porcentajes))
+
+# Mostrar el resultado
+print(df_porcentajes)
+
+ctable( x = data_cruzada$Respuesta, y = data_cruzada$Comunas, prop = "c", justify = "l", chisq = T)
 
 # 5.2.4. ea_04_notas_ultimo_semestre ####
-# responsable:  
+# responsable:  SAMANTA
 # frecuencia
+
+notas_semestrales_t <- freq(base_antropologia$ea_04_notas_ultimo_semestre, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$ea_04_notas_ultimo_semestre, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Notas", "Frecuencia", "%", "% Acumulado"),
+        caption = "Notas ultimo semestre", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/notas_semestrales.png", zoom = 3)
+
+#error con funcion svae_kable: png tabla de frecuencia se encontrará en la carpeta outputs como "notas_semestrales.png"
+
 # gráfico
-# tabla de contingencia
+notas_semestrales_t <-  notas_semestrales_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+notas_semestrales_g <- ggplot(notas_semestrales_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Notas semestrales 2023",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Notas ultimo semestre") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum() 
+ggsave("outputs/notas_semestrales_g.png", plot = notas_semestrales_g, width = 10, height = 7, dpi = 300)
+
 
 # 5.2.5. ea_05_satisfaccion_rendimiento_academico ####
-# responsable:  
+# responsable:  SAMANTA
 # frecuencia
+
+
+satisfaccion_rendimiento_academico_t <- freq(base_antropologia$ea_05_satisfaccion_rendimiento_academico_r, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$ea_05_satisfaccion_rendimiento_academico_r, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Niveles de satisfaccion", "Frecuencia", "%", "% Acumulado"),
+        caption = "Satifaccion rendimiento academico", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  save_kable(file = "outputs/satisfaccion_rendimiento_academico.png", zoom = 3)
+
+#error con funcion save_kable: png tabla de frecuencia se encontrará en la carpeta como "satisfaccion_rendimiento_academico.png"
+
 # gráfico
-# tabla de contingencia
+satisfaccion_rendimiento_academico_t <-  satisfaccion_rendimiento_academico_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+satisfaccion_rendimiento_academico_g <- ggplot(satisfaccion_rendimiento_academico_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Satisfaccion de rendimiento academico",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Percepcion de rendimiento academico") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/satisfaccion_academica_g.png", plot = satisfaccion_rendimiento_academico_g, width = 10, height = 7, dpi = 300)
+
 
 
 # 5.2.6. ea_06_nivel_estres_ultimo_semestre ####
-# responsable:  
+table(base_antropologia$ea_06_nivel_estres_ultimo_semestre_r)
+# responsable:  SAMANTA
 # frecuencia
+
+nivel_estres_t <- freq(base_antropologia$ea_06_nivel_estres_ultimo_semestre_r, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$ea_06_nivel_estres_ultimo_semestre_r, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Niveles de estres", "Frecuencia", "%", "% Acumulado"),
+        caption = "Nivel de estres en el ultimo semestre", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") 
+
+#  save_kable(file = "outputs/nivel_estres.png", zoom = 3)
+
+#error con funcion save_kable: png tabla de frecuencia se encontrará en la carpeta como "satisfaccion_rendimiento_academico.png"
+
 # gráfico
-# tabla de contingencia
+nivel_estres_t <-  nivel_estres_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+nivel_estres_g <- ggplot(nivel_estres_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Niveles de estres en el ultimo semestre",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Nivel de estres") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/nivel_estres_g.png", plot = nivel_estres_g, width = 10, height = 7, dpi = 300)
+
 
 # 5.2.7. ea_07_efecto_estres_rendimiento ####
+table(base_antropologia$ea_07_efecto_estres_rendimiento_r)
 # responsable:  
 # frecuencia
-# gráfico
-# tabla de contingencia
 
+efecto_estres_t <- freq(base_antropologia$ea_07_efecto_estres_rendimiento_r, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$ea_07_efecto_estres_rendimiento_r, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Efectos de estres", "Frecuencia", "%", "% Acumulado"),
+        caption = "Efectos del estres en el rendimiento academico", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") 
+
+#  save_kable(file = "outputs/nivel_estres.png", zoom = 3)
+
+#error con funcion save_kable: png tabla de frecuencia se encontrará en la carpeta como "satisfaccion_rendimiento_academico.png"
+
+# gráfico
+efecto_estres_t <-  efecto_estres_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+efecto_estres_g <- ggplot(efecto_estres_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Efectos del estres en el rendimiento academico",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "impacto del estres") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/efecto_estres_g.png", plot = efecto_estres_g, width = 10, height = 7, dpi = 300)
 
 # 5.2.8. ea_08 ####
+able(base_antropologia$ea_08)
 # responsable:  
 # frecuencia
-# gráfico
-# tabla de contingencia
 
+identificar_sintomas_t <- freq(base_antropologia$ea_08, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb()
+
+freq(base_antropologia$ea_08, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
+  tb() %>%
+  kable(col.names = c("Capacidad", "Frecuencia", "%", "% Acumulado"),
+        caption = "Capacidad de identificar sintomas de estres", 
+        format = "html", digits = 2) %>%  #le doy formate con kable
+  kable_classic(full_width = F, html_font = "Cambria") 
+
+#  save_kable(file = "outputs/identificar_sintomas.png", zoom = 3)
+
+#error con funcion save_kable: png tabla de frecuencia se encontrará en la carpeta como "identificar_sintomas.png"
+
+# gráfico
+identificar_sintomas_t <-  identificar_sintomas_t %>% 
+  rename(Nombre = value, Porcentaje= pct, Frecuencia = freq)
+
+
+# realizo gráfico
+identificar_sintomas_g <- ggplot(identificar_sintomas_t, aes(x = Frecuencia, y = fct_reorder(Nombre, Frecuencia), fill= Nombre)) +
+  geom_col() +
+  labs(title = "Capacidad de identificar sintomas de estres",
+       subtitle = "según datos de Encuestas Estudiantes Antropología 2024",
+       x = "%",  # Esto establece el título del eje x, pero no afecta las etiquetas dentro del gráfico
+       y = "Capacidad de identificar sintomas") +
+  geom_text(aes(label = round(Frecuencia, 1)),  # Ahora esto añade etiquetas a todas las barras
+            hjust = 1, size = 3, nudge_x = -0.9, fontface= "bold", color = "white") +
+  scale_fill_viridis_d(option = "C", guide = "none") +
+  theme_ipsum()
+
+# guardo gráfico
+
+ggsave("outputs/identificar_sintomas_g.png", plot = identificar_sintomas_g, width = 10, height = 7, dpi = 300)
 
 # 5.2.9. ea_09 ####
 # responsable:   Sebastian
