@@ -15,6 +15,7 @@ pacman::p_load(tidyverse, openxlsx, readxl,readr,janitor, forcats, writexl, Data
 base_antropologia <- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx")
 libro_codigos<- read.xlsx("Métodos Cuantitativos III (respuestas).xlsx") # dejo una base sin limpiar para observar nombres de preguntas
 
+
 #Explorar
 glimpse(base_antropologia) #Una primera mirada de lo que hay en mis datos, la primera fila es extraña, dice "respuesta" o repite el nombre de la variable.
 names(base_antropologia) #observo que hay puntos, mayúsculas y minúsculas, etcétera. Está sucia
@@ -911,6 +912,27 @@ ctable(x = data_cruzada$Estres, y = data_cruzada$IdentidadGenero, prop = "c", ju
 
 #hay una relación significativa entre las dos variables.
 
+#gráfico bivariado
+
+identidad_estres_g <- ggplot(data = base_antropologia %>%
+         filter(!is.na(ea_06_nivel_estres_ultimo_semestre_r)),  # Filtrar filas con NA en ea_06_nivel_estres_ultimo_semestre_r
+       aes(x = identidad_genero_r, fill = ea_06_nivel_estres_ultimo_semestre_r)) +
+  geom_bar(position = "stack") +
+  labs(
+    title = "Niveles de Estrés por Identidad de Género",
+    x = "Identidad de Género",
+    y = "Frecuencia",
+    fill = "" 
+  ) +
+  scale_fill_brewer(palette = "Set3") +  # Paleta de colores
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+ggsave("outputs/identidad_estres.png", plot = identidad_estres_g, width = 10, height = 7, dpi = 300)
+
+
 # 5.1.3. edad ####
 # responsable 
 # frecuencia
@@ -1004,6 +1026,77 @@ ggsave("outputs/ea_01_horas_estudio_semana_g.png", plot = ea_01_horas_estudio_se
 
 
 # tabla de contingencia
+base_antropologia <- base_antropologia %>%
+  mutate(
+    ea_06_nivel_estres_ultimo_semestre_r = as.character(ea_01_horas_estudio_semana),
+    identidad_genero_r = as.character(nivel_educacion_padre)
+  )
+
+# Crear tabla de contingencia y calcular porcentajes
+
+summarytools::ctable( x = base_antropologia$ea_01_horas_estudio_semana, y = base_antropologia$nivel_educacion_padre)
+
+base_antropologia$nivel_educacion_padre <- base_antropologia$nivel_educacion_padre %>% 
+  fct_relevel(c("Educación Básica", "Educación Media Educación Profesional", "Educación Técnica" )) %>% 
+  fct_drop("No aplica") #ordeno los resultados según raza y elimino la categoría no aplica
+
+table(base_antropologia$nivel_educacion_padre)
+
+base_antropologia$ea_01_horas_estudio_semana <- base_antropologia$ea_01_horas_estudio_semana %>% 
+  fct_relevel(c("1 o 2 horas al día", "3 o 4 horas al día",  "5 o 6 horas por días Más de 7 horas por día" )) %>% 
+  fct_drop("No aplica") #ordeno los resultados según raza y elimino la categoría no aplica
+
+table(base_antropologia$ea_01_horas_estudio_semana)
+
+ctable( x = base_antropologia$ea_01_horas_estudio_semana, y = base_antropologia$nivel_educacion_padre, prop = "t", justify = "l")
+
+#guardarlo
+
+contingencia_h_estudio_ed_padre <- ctable(
+  x = base_antropologia$ea_01_horas_estudio_semana,
+  y = base_antropologia$nivel_educacion_padre,
+  prop = "t",  # Proporciones sobre el total
+  justify = "l"  # Justificación de las celdas a la izquierda
+)
+
+contingencia_h_estudio_ed_padre  <- 
+  base_antropologia %>%
+  filter(nivel_educacion_padre != "Sin respuesta") %>%
+  select(nivel_educacion_padre, ea_01_horas_estudio_semana) %>%
+  droplevels() %>%
+  table(.) %>% 
+  addmargins(.,2) %>% 
+  prop.table(.,2) %>% 
+  round(4)*100
+
+#ahora se guarda en imagen
+contingencia_h_estudio_ed_padre %>% 
+  kable(., caption="Tabla de contingencia para nivel educacional del padre y horas de estudio") %>% 
+  kable_classic(full_width = F, html_font = "Cambria", font_size = 15) %>% 
+  save_kable(file = "outputs/contingencia_h_estudio_ed_padre.png", zoom = 2)
+
+
+
+#grafico bivariado
+h_estudio_ed_padre_g <- ggplot(data = base_antropologia %>%
+                                 filter(!is.na(ea_01_horas_estudio_semana)) %>%
+                               filter(!is.na(nivel_educacion_padre)),  # Filtrar filas con NA en ea_06_nivel_estres_ultimo_semestre_r
+                             aes(x = nivel_educacion_padre, fill = ea_01_horas_estudio_semana)) +
+  geom_bar(position = "stack") +
+  labs(
+    title = "Horas de estudio según la educación del padre",
+    x = "Nivel de educación del padre",
+    y = "Frecuencia",
+    fill = "" 
+  ) +
+  scale_fill_brewer(palette = "Set3") +  # Paleta de colores
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+ggsave("outputs/horas_estudio_ed_padre_g.png", plot = h_estudio_ed_padre_g, width = 10, height = 7, dpi = 300)
+
 
 
 # 5.2.2. ea_02_horas_estudio_fin_semana ####
@@ -1041,6 +1134,7 @@ ea_02_horas_estudio_fin_semana_g <- ggplot(ea_02_horas_estudio_fin_semana_t, aes
 ggsave("outputs/ea_02_horas_estudio_fin_semana_g.png", plot = ea_02_horas_estudio_fin_semana_g, width = 10, height = 7, dpi = 300)
 
 # tabla de contingencia
+
 
 
 # 5.2.3. ea_03_descripcion_carga_academica ####
