@@ -1361,6 +1361,28 @@ print(df_porcentajes)
 
 ctable( x = data_cruzada$Respuesta, y = data_cruzada$Comunas, prop = "c", justify = "l", chisq = T)
 
+#Grafico bivariado
+c_academica_comuna_g <- ggplot(data = base_antropologia %>%
+                                 filter(!is.na(sd_05_en_que_comuna_reside)) %>%
+                                 filter(!is.na(ea_03_como_describiria_su_carga_academica_actual)),  # Filtrar filas con NA en ea_06_nivel_estres_ultimo_semestre_r
+                               aes(x = sd_05_en_que_comuna_reside, fill = ea_03_como_describiria_su_carga_academica_actual)) +
+  geom_bar(position = "stack") +
+  labs(
+    title = "Carga academíca según comuna de residencia",
+    x = "Comuna de reidencia",
+    y = "Frecuencia",
+    fill = "" 
+  ) +
+  scale_fill_brewer(palette = "Set3") +  # Paleta de colores
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+ggsave("outputs/c_academica_comuna_g.png", plot = c_academica_comuna_g, width = 10, height = 7, dpi = 300)
+
+names(base_antropologia)
+
 # 5.2.4. ea_04_notas_ultimo_semestre ####
 # responsable:  SAMANTA
 # frecuencia
@@ -1400,7 +1422,6 @@ ggsave("outputs/notas_semestrales_g.png", plot = notas_semestrales_g, width = 10
 # 5.2.5. ea_05_satisfaccion_rendimiento_academico ####
 # responsable:  SAMANTA
 # frecuencia
-
 
 satisfaccion_rendimiento_academico_t <- freq(base_antropologia$ea_05_satisfaccion_rendimiento_academico_r, prop=TRUE, order = "freq", report.nas = FALSE) %>% 
   tb()
